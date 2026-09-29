@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+body { font-family: 'Inter', sans-serif; }
+html { scroll-behavior: smooth; }
+
+.bounce-text span { display: inline-block; animation: bounce 2.4s ease-in-out infinite; }
+.bounce-text span:nth-child(1) { animation-delay: 0.0s; }
+.bounce-text span:nth-child(2) { animation-delay: 0.2s; }
+.bounce-text span:nth-child(3) { animation-delay: 0.4s; }
+.bounce-text span:nth-child(4) { animation-delay: 0.6s; }
+.bounce-text span:nth-child(5) { animation-delay: 0.8s; }
+.bounce-text span:nth-child(6) { animation-delay: 1.0s; }
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-0.4rem); }
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes btn-shine {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(100%); }
+}
+
+.btn-encrypt-shine {
+    animation: btn-shine 1s linear infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-encrypt-shine { animation: none; }
+}
+/* Bolinha de status "disponível" — verde neon pulsante */
+.status-dot {
+    position: relative;
+    display: inline-block;
+    width: 0.5rem;       /* 8px */
+    height: 0.5rem;      /* 8px */
+    border-radius: 9999px;
+    background: #22ff88; /* verde neon */
+    box-shadow:
+        0 0 4px #22ff88,
+        0 0 10px #22ff88,
+        0 0 20px rgba(34, 255, 136, 0.6);
+    animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+/* Halo/ondas ao redor */
+.status-dot::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    background: rgba(34, 255, 136, 0.35);
+    animation: ping-dot 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    z-index: -1;
+}
+
+@keyframes pulse-dot {
+    0%, 100% {
+        opacity: 1;
+        box-shadow:
+            0 0 4px #22ff88,
+            0 0 10px #22ff88,
+            0 0 20px rgba(34, 255, 136, 0.6);
+    }
+    50% {
+        opacity: 0.75;
+        box-shadow:
+            0 0 6px #22ff88,
+            0 0 14px #22ff88,
+            0 0 28px rgba(34, 255, 136, 0.8);
+    }
+}
+
+@keyframes ping-dot {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    75%, 100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .status-dot,
+    .status-dot::before {
+        animation: none;
+    }
+}
