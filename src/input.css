@@ -93,3 +93,57 @@ html { scroll-behavior: smooth; }
         animation: none;
     }
 }
+
+
+/* Projetos por area: controles nativos, utilizaveis sem JavaScript. */
+.project-areas { display: grid; gap: 1rem; }
+.project-area {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-slate-200);
+    border-radius: 1rem;
+    background: var(--color-slate-50);
+}
+.project-area-toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 5rem;
+    padding: 1.5rem;
+    color: var(--color-slate-900);
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 180ms ease-out;
+}
+.project-area-toggle::-webkit-details-marker { display: none; }
+.project-area-toggle::marker { content: ""; }
+.project-area-toggle:hover { background: var(--color-slate-100); }
+.project-area-toggle:focus-visible {
+    outline: 2px solid var(--color-slate-900);
+    outline-offset: -4px;
+    border-radius: 1rem;
+}
+.project-area-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+.project-area-count { flex-shrink: 0; color: var(--color-slate-600); font-size: 0.875rem; }
+.project-area-chevron { flex-shrink: 0; transition: transform 180ms ease-out; }
+.project-area[open] > .project-area-toggle { border-bottom: 1px solid var(--color-slate-200); }
+.project-area[open] > .project-area-toggle .project-area-chevron { transform: rotate(180deg); }
+.project-area-content { padding: 1.5rem; }
+.project-area-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+.project-area-empty { color: var(--color-slate-600); font-size: 0.875rem; line-height: 1.6; }
+@media (max-width: 639px) {
+    .project-area-toggle { gap: 0.75rem; padding: 1.25rem 1rem; }
+    .project-area-title { font-size: 1.125rem; }
+    .project-area-count { font-size: 0.75rem; }
+    .project-area-content { padding: 1rem; }
+    .project-area-grid { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .project-area-toggle, .project-area-chevron { transition: none; }
+}
