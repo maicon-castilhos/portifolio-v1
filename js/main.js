@@ -74,3 +74,40 @@ document.querySelectorAll('.btn-encrypt').forEach((btn) => {
     btn.addEventListener('focus', scramble);
     btn.addEventListener('blur', stopScramble);
 });
+
+// Arsenal tecnico: movimento 3D com pausa explicita e fallback estatico.
+const arsenalCarousel = document.querySelector('.arsenal-carousel');
+if (arsenalCarousel) {
+    const controls = arsenalCarousel.querySelector('.arsenal-controls');
+    const pauseButton = arsenalCarousel.querySelector('.arsenal-pause');
+    const pauseLabel = pauseButton.querySelector('span');
+    const pauseIcon = pauseButton.querySelector('.arsenal-pause-icon');
+    const playIcon = pauseButton.querySelector('.arsenal-play-icon');
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    arsenalCarousel.classList.add('is-ready');
+    const syncMotionPreference = () => { controls.hidden = motionPreference.matches; };
+    syncMotionPreference();
+    motionPreference.addEventListener('change', syncMotionPreference);
+
+    pauseButton.addEventListener('click', () => {
+        const paused = arsenalCarousel.classList.toggle('is-paused');
+        pauseButton.setAttribute('aria-pressed', String(paused));
+        pauseLabel.textContent = paused ? 'Retomar rotação' : 'Pausar rotação';
+        pauseIcon.toggleAttribute('hidden', paused);
+        playIcon.toggleAttribute('hidden', !paused);
+    });
+
+    // Nao gastar animacao quando a secao ou a pagina nao estao visiveis.
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(([entry]) => {
+            arsenalCarousel.classList.toggle('is-outside', !entry.isIntersecting);
+        });
+        observer.observe(arsenalCarousel);
+    }
+    const syncPageVisibility = () => {
+        arsenalCarousel.classList.toggle('is-page-hidden', document.hidden);
+    };
+    syncPageVisibility();
+    document.addEventListener('visibilitychange', syncPageVisibility);
+}

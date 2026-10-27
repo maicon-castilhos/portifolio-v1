@@ -717,10 +717,12 @@
             </p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Linguagens -->
-            <div
-              class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow"
+          <div class="arsenal-carousel" aria-labelledby="skills-title">
+            <div class="arsenal-stage">
+              <div class="arsenal-orbit">
+                <div class="arsenal-slide" style="--orbit-delay: -0s">
+                  <div
+              class="arsenal-card bg-white p-6 rounded-2xl border border-slate-200"
             >
               <div class="flex items-center mb-4">
                 <div class="mr-3 text-black" aria-hidden="true">
@@ -765,10 +767,10 @@
                 </div>
               </div>
             </div>
-
-            <!-- Frameworks -->
-            <div
-              class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow"
+                </div>
+                <div class="arsenal-slide" style="--orbit-delay: -12s">
+                  <div
+              class="arsenal-card bg-white p-6 rounded-2xl border border-slate-200"
             >
               <div class="flex items-center mb-4">
                 <div class="mr-3 text-black" aria-hidden="true">
@@ -831,10 +833,10 @@
                 </div>
               </div>
             </div>
-
-            <!-- Data & Cloud -->
-            <div
-              class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow"
+                </div>
+                <div class="arsenal-slide" style="--orbit-delay: -24s">
+                  <div
+              class="arsenal-card bg-white p-6 rounded-2xl border border-slate-200"
             >
               <div class="flex items-center mb-4">
                 <div class="mr-3 text-black" aria-hidden="true">
@@ -875,10 +877,10 @@
                 </div>
               </div>
             </div>
-
-            <!-- Ferramentas -->
-            <div
-              class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow"
+                </div>
+                <div class="arsenal-slide" style="--orbit-delay: -36s">
+                  <div
+              class="arsenal-card bg-white p-6 rounded-2xl border border-slate-200"
             >
               <div class="flex items-center mb-4">
                 <div class="mr-3 text-black" aria-hidden="true">
@@ -937,6 +939,20 @@
                   ><span>Maven</span>
                 </div>
               </div>
+            </div>
+                </div>
+              </div>
+            </div>
+            <div class="arsenal-controls" hidden>
+              <button type="button" class="arsenal-pause" aria-pressed="false">
+                <svg class="arsenal-pause-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M9 5v14M15 5v14" stroke-linecap="round" />
+                </svg>
+                <svg class="arsenal-play-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden>
+                  <path d="m8 5 11 7-11 7V5Z" stroke-linejoin="round" />
+                </svg>
+                <span>Pausar rotação</span>
+              </button>
             </div>
           </div>
 
