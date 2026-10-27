@@ -8,11 +8,13 @@ const menuLines = document.getElementById('menu-lines');
 function setMenuOpen(open) {
     navigation.classList.toggle('is-open', open);
     menuButton.setAttribute('aria-expanded', String(open));
-    menuButton.setAttribute('aria-label', open ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+    const menuLabel = open ? 'Fechar menu de navegação' : 'Abrir menu de navegação';
+    menuButton.setAttribute('aria-label', window.portfolioI18n?.t(menuLabel) ?? menuLabel);
     menuLines.setAttribute('d', open ? 'M6 6l12 12M6 18 18 6' : 'M4 6h16M4 12h16M4 18h16');
 }
 if (menuButton && navigation) {
     menuButton.hidden = false;
+    document.addEventListener('portfolio:languagechange', () => setMenuOpen(menuButton.getAttribute('aria-expanded') === 'true'));
     menuButton.addEventListener('click', () => setMenuOpen(menuButton.getAttribute('aria-expanded') !== 'true'));
     navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenuOpen(false)));
     document.addEventListener('keydown', event => {

@@ -45,7 +45,9 @@
       content="https://maicon-castilhos.github.io/portifolio-v1/assets/about.jpg"
     />
     <title>Maicon Amaral | Desenvolvedor Full Stack</title>
-    <link rel="stylesheet" href="./dist/output.css?v=fullstack-20261027" />
+    <meta name="theme-color" content="#ffffff" />
+    <script src="./js/preferences-init.js?v=theme-language-1"></script>
+    <link rel="stylesheet" href="./dist/output.css?v=theme-language-1" />
 
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -170,14 +172,23 @@
     <header class="site-header">
       <div class="site-container header-inner">
         <a href="#home" class="brand" aria-label="Maicon Amaral — início"><img src="assets/logo-port.svg" alt="" width="32" height="32" /><span>Amaral</span></a>
-        <button id="mobile-menu-button" class="menu-button" type="button" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="main-navigation" hidden>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path id="menu-lines" d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" /></svg>
-        </button>
         <nav id="main-navigation" class="main-navigation" aria-label="Navegação principal"><a href="#home" class="nav-link" aria-current="location">Início</a>
 <a href="#projects" class="nav-link">Projetos</a>
 <a href="#about" class="nav-link">Sobre</a>
 <a href="#skills" class="nav-link">Arsenal</a>
 <a href="#contact" class="nav-link">Contato</a></nav>
+        <div class="header-actions">
+          <div class="site-preferences" hidden>
+            <button id="theme-toggle" class="preference-button" type="button" aria-label="Ativar modo escuro" title="Ativar modo escuro" aria-pressed="false">
+              <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.5 13.1A8.7 8.7 0 0 1 10.9 3.5 8.7 8.7 0 1 0 20.5 13.1Z" stroke-linejoin="round" /></svg>
+              <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4 19 5" stroke-linecap="round" /></svg>
+            </button>
+            <button id="language-toggle" class="preference-button language-toggle" type="button" lang="en" aria-label="Alterar idioma para inglês" title="Alterar idioma para inglês">EN</button>
+          </div>
+<button id="mobile-menu-button" class="menu-button" type="button" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="main-navigation" hidden>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path id="menu-lines" d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" /></svg>
+        </button>
+        </div>
       </div>
     </header>
     <main id="main" tabindex="-1">
@@ -350,6 +361,8 @@
       </div></section>
     </main>
     <footer class="site-footer"><div class="site-container footer-layout"><p>© <span id="year">2026</span> Maicon Amaral<br /><span>Desenvolvimento Full Stack · Java, Spring Boot, React e Angular</span></p><nav aria-label="Links profissionais"><a href="https://github.com/maicon-castilhos" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.linkedin.com/in/maicon-amaral-b9283722a/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="assets/curriculo-maicon-amaral-full-stack.pdf" type="application/pdf" download>Currículo</a></nav></div></footer>
-    <script src="./js/main.js?v=fullstack-20261027" defer></script>
+    <div id="preference-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+    <script src="./js/i18n.js?v=theme-language-1" defer></script>
+    <script src="./js/main.js?v=theme-language-1" defer></script>
   </body>
 </html>
