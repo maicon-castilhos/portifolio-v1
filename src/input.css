@@ -149,84 +149,46 @@ html { scroll-behavior: smooth; }
 }
 
 
-/* Arsenal: cards orbitam um eixo central com profundidade real. */
-.arsenal-orbit { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
+/* Arsenal em anel: cada face acompanha a rotacao do conjunto. */
+.arsenal-orbit { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
 .arsenal-card { height: 100%; }
 .arsenal-controls[hidden] { display: none; }
-.arsenal-controls { display: flex; justify-content: center; margin-top: 1rem; }
-.arsenal-pause {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 44px;
-    padding: 0.625rem 1rem;
-    border: 1px solid var(--color-slate-200);
-    border-radius: 0.5rem;
-    background: white;
-    color: var(--color-slate-700);
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
+.arsenal-controls { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
+.arsenal-pause, .arsenal-step {
+ display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+ min-height: 44px; padding: 0.625rem 1rem; border: 1px solid var(--color-slate-200);
+ border-radius: 0.5rem; background: white; color: var(--color-slate-700); font-size: 0.875rem; font-weight: 600; cursor: pointer;
 }
-.arsenal-pause:hover { background: var(--color-slate-100); }
-.arsenal-pause:focus-visible { outline: 2px solid var(--color-slate-900); outline-offset: 4px; }
+.arsenal-step { width: 44px; padding: 0; }
+.arsenal-pause:hover, .arsenal-step:hover { background: var(--color-slate-100); }
+.arsenal-pause:focus-visible, .arsenal-step:focus-visible { outline: 2px solid var(--color-slate-900); outline-offset: 4px; }
 .arsenal-pause svg[hidden] { display: none; }
-@media (max-width: 1023px) {
-    .arsenal-orbit { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.arsenal-carousel.is-ready { --orbit-radius: clamp(12rem, 25vw, 18rem); --orbit-width: clamp(10rem, 20vw, 15rem); --orbit-height: 14rem; }
+.arsenal-carousel.is-ready .arsenal-stage { position: relative; height: 28rem; overflow: hidden; perspective: 1200px; perspective-origin: 50% 42%; }
+.arsenal-carousel.is-ready .arsenal-orbit { display: block; position: absolute; inset: 0; transform-style: preserve-3d; animation: arsenal-ring 64s linear infinite; }
+.arsenal-carousel.is-ready .arsenal-slide {
+ position: absolute; top: 50%; left: 50%; width: var(--orbit-width); height: var(--orbit-height);
+ margin-top: calc(var(--orbit-height) / -2); margin-left: calc(var(--orbit-width) / -2);
+ transform-style: preserve-3d; transform: rotateY(var(--card-angle)) translateZ(var(--orbit-radius));
 }
+.arsenal-carousel.is-ready .arsenal-card { position: relative; backface-visibility: hidden; box-shadow: 0 10px 24px rgb(15 23 42 / 10%); }
+.arsenal-carousel.is-ready .arsenal-slide::after {
+ content: ""; position: absolute; inset: 0; border: 1px solid var(--color-slate-300); border-radius: 1rem; background: var(--color-slate-200);
+ transform: rotateY(180deg) translateZ(1px); backface-visibility: hidden;
+}
+.arsenal-carousel.is-paused .arsenal-orbit,
+.arsenal-carousel.is-outside .arsenal-orbit,
+.arsenal-carousel.is-page-hidden .arsenal-orbit,
+.arsenal-stage:focus-within .arsenal-orbit { animation-play-state: paused; }
+@media (hover: hover) { .arsenal-stage:hover .arsenal-orbit { animation-play-state: paused; } }
+@media (max-width: 1023px) { .arsenal-orbit { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 639px) {
-    .arsenal-orbit { grid-template-columns: minmax(0, 1fr); }
+ .arsenal-orbit { grid-template-columns: minmax(0, 1fr); }
+ .arsenal-carousel.is-ready .arsenal-stage { height: 23rem; perspective: 1000px; }
+ .arsenal-carousel.is-ready .arsenal-card { padding: 1rem; }
+ .arsenal-carousel.is-ready .arsenal-card h3 { font-size: 0.875rem; }
 }
-@media (prefers-reduced-motion: no-preference) {
-    .arsenal-carousel.is-ready {
-        --orbit-radius: clamp(3rem, 20vw, 16rem);
-        --orbit-width: clamp(16rem, 28vw, 19rem);
-        --orbit-height: 19rem;
-    }
-    .arsenal-carousel.is-ready .arsenal-stage {
-        position: relative;
-        height: 28rem;
-        overflow: hidden;
-        perspective: 1000px;
-        perspective-origin: 50% 50%;
-    }
-    .arsenal-carousel.is-ready .arsenal-orbit {
-        display: block;
-        position: absolute;
-        inset: 0;
-        transform-style: preserve-3d;
-    }
-    .arsenal-carousel.is-ready .arsenal-slide {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: var(--orbit-width);
-        height: var(--orbit-height);
-        margin-top: calc(var(--orbit-height) / -2);
-        margin-left: calc(var(--orbit-width) / -2);
-        transform-style: preserve-3d;
-        animation: arsenal-orbit 48s linear infinite;
-        animation-delay: var(--orbit-delay);
-    }
-    .arsenal-carousel.is-ready .arsenal-card {
-        box-shadow: 0 12px 28px rgb(15 23 42 / 8%);
-    }
-    .arsenal-carousel.is-paused .arsenal-slide,
-    .arsenal-carousel.is-outside .arsenal-slide,
-    .arsenal-carousel.is-page-hidden .arsenal-slide,
-    .arsenal-stage:focus-within .arsenal-slide { animation-play-state: paused; }
-    @media (hover: hover) {
-        .arsenal-stage:hover .arsenal-slide { animation-play-state: paused; }
-    }
-    @media (max-width: 639px) {
-        .arsenal-carousel.is-ready { --orbit-height: 22rem; --orbit-width: clamp(14rem, 60vw, 16rem); }
-        .arsenal-carousel.is-ready .arsenal-stage { height: 27rem; perspective: 800px; }
-    }
-}
-@keyframes arsenal-orbit {
-    from { transform: rotateY(0deg) translateZ(var(--orbit-radius)) rotateY(0deg); }
-    to { transform: rotateY(360deg) translateZ(var(--orbit-radius)) rotateY(-360deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-    .arsenal-carousel .arsenal-controls { display: none; }
+@keyframes arsenal-ring {
+ from { transform: rotateX(-10deg) rotateY(-22.5deg); }
+ to { transform: rotateX(-10deg) rotateY(337.5deg); }
 }
