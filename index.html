@@ -11,6 +11,8 @@
 <meta property="og:description" content="Portfólio de Maicon Amaral: APIs REST com Java, Spring Boot, PostgreSQL, segurança e testes.">
 <meta property="og:url" content="https://maicon-castilhos.github.io/portifolio-v1/">
 <meta property="og:image" content="https://maicon-castilhos.github.io/portifolio-v1/assets/about.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Maicon Amaral | Desenvolvedor Back-end Java">
 <meta name="twitter:description" content="Portfólio de Maicon Amaral: APIs REST com Java, Spring Boot, PostgreSQL, segurança e testes.">
@@ -21,623 +23,360 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* Layout: barra lateral neon fixa + coluna de conteúdo; fundo matrix rain revelado pelo cursor. Visual escuro único, por escolha. */
+/* Layout: painel fixo à esquerda (identidade + navegação) e uma coluna de conteúdo em linhas à direita. Visual escuro único, por escolha. */
 :root{
   --void:#060a14;        /* fundo */
-  --panel:#0c1324;       /* superfícies */
-  --panel-2:#111b33;
+  --panel:#0d1528;       /* superfície de destaque */
   --ink:#e6eefb;         /* texto */
-  --dim:#8fa2c2;         /* texto secundário */
+  --dim:#93a5c4;         /* texto secundário */
   --line:#1c2a47;        /* bordas */
-  --neon:#3fd0ff;        /* ciano neon (acento) */
-  --neon-2:#8b7bff;      /* violeta do brilho */
-  --spring:#7fd14b;      /* verde Spring (secundário) */
+  --neon:#3fd0ff;        /* acento */
+  --spring:#7fd14b;      /* rótulos e estados */
   --warn:#ffb547;
   --f-display:"Chakra Petch","Space Grotesk",system-ui,sans-serif;
   --f-body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
-  --side:96px;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--void);color:var(--ink);font:400 16px/1.65 var(--f-body);overflow-x:hidden}
+body{margin:0;background:var(--void);color:var(--ink);font:400 16px/1.65 var(--f-body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--void);z-index:10}
 a{color:inherit}
+p{margin:0}
 :focus-visible{outline:2px solid var(--neon);outline-offset:3px;border-radius:6px}
 .skip{position:absolute;left:-999px;top:8px;background:var(--neon);color:var(--void);padding:8px 14px;border-radius:8px;z-index:50;font-weight:600}
-.skip:focus{left:calc(var(--side) + 16px)}
+.skip:focus{left:16px}
+#glow{position:fixed;left:0;top:0;width:720px;height:720px;margin:-360px 0 0 -360px;border-radius:50%;pointer-events:none;z-index:0;opacity:0;transition:opacity .5s;
+  background:radial-gradient(circle,rgba(63,208,255,.11) 0%,rgba(63,208,255,.04) 40%,transparent 68%);will-change:transform}
+#glow.on{opacity:1}
+@media (hover:none){#glow{display:none}}
 
-/* ===== Fundo revelado pelo mouse ===== */
-#bgBase,#bgReveal{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
-#bgBase{display:none}
-#bgReveal{
-  --mx:-500px;--my:-500px;opacity:0;transition:opacity .6s ease;
-  -webkit-mask-image:radial-gradient(circle 230px at var(--mx) var(--my),#000 0%,rgba(0,0,0,.5) 40%,transparent 100%);
-          mask-image:radial-gradient(circle 230px at var(--mx) var(--my),#000 0%,rgba(0,0,0,.5) 40%,transparent 100%);
-}
-body.mouse #bgReveal{opacity:1}
-#glow{position:fixed;left:0;top:0;width:460px;height:460px;margin:-230px 0 0 -230px;border-radius:50%;pointer-events:none;z-index:1;
-  background:radial-gradient(circle,rgba(63,208,255,.34) 0%,rgba(139,123,255,.16) 34%,rgba(139,123,255,.05) 55%,transparent 70%);opacity:0;transition:opacity .6s ease;will-change:transform}
-body.mouse #glow{opacity:.75}
+.shell{position:relative;z-index:1;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:72px;
+  padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
 
-/* ===== Barra lateral neon ===== */
-.side{position:fixed;left:0;top:0;bottom:0;width:calc(var(--side) + env(safe-area-inset-left,0px));padding:calc(20px + env(safe-area-inset-top,0px)) 0 calc(20px + env(safe-area-inset-bottom,0px)) env(safe-area-inset-left,0px);
-  z-index:20;display:flex;flex-direction:column;align-items:center;gap:18px;background:linear-gradient(180deg,rgba(12,19,36,.97),rgba(6,10,20,.97));border-right:1px solid var(--line)}
-.side::before{content:"";position:absolute;right:-1px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--neon) 30%,var(--neon-2) 70%,transparent);opacity:.45;box-shadow:0 0 12px var(--neon)}
-.side::after{content:"";position:absolute;right:-2px;width:3px;height:140px;top:-140px;background:linear-gradient(180deg,transparent,#fff,var(--neon),transparent);box-shadow:0 0 18px var(--neon);opacity:0}
-.side.zap::after{animation:beam .8s ease-out}
-@keyframes beam{0%{top:-140px;opacity:1}100%{top:100%;opacity:0}}
-.brand{font:700 20px var(--f-display);text-decoration:none;letter-spacing:.02em;text-align:center;line-height:1}
-.brand b{display:block;color:var(--neon);text-shadow:0 0 10px var(--neon)}
-.brand small{display:block;font:500 10.5px var(--f-mono);color:var(--dim);margin-top:6px;letter-spacing:.12em}
-.nav{position:relative;list-style:none;margin:auto 0;padding:0;display:flex;flex-direction:column;gap:6px;width:100%}
-.nav a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px;text-decoration:none;color:var(--dim);transition:color .25s}
-.nav .g{font:600 17px var(--f-mono);line-height:1.2;transition:text-shadow .25s,transform .25s}
-.nav .l{font:500 11.5px var(--f-mono);letter-spacing:.02em;text-transform:uppercase}
-.nav a:hover{color:var(--ink)}
-.nav a:hover .g{transform:translateY(-2px)}
-.nav a.active{color:var(--neon)}
-.nav a.active .g{text-shadow:0 0 8px var(--neon),0 0 22px var(--neon)}
-.ind{position:absolute;left:10px;right:10px;top:0;height:56px;border-radius:12px;pointer-events:none;
-  background:linear-gradient(90deg,rgba(63,208,255,.16),rgba(139,123,255,.10));border:1px solid rgba(63,208,255,.55);
-  box-shadow:0 0 14px rgba(63,208,255,.45),inset 0 0 14px rgba(63,208,255,.18);transition:transform .55s cubic-bezier(.7,-0.3,.25,1.35),height .4s,width .4s}
-.ind::before{content:"";position:absolute;left:-11px;top:50%;width:4px;height:60%;transform:translateY(-50%);border-radius:0 4px 4px 0;background:var(--neon);box-shadow:0 0 10px var(--neon),0 0 24px var(--neon)}
-.side.zap .ind{animation:flick .6s}
-@keyframes flick{0%,100%{opacity:1}15%{opacity:.3}30%{opacity:1}45%{opacity:.5}60%{opacity:1}}
-.readout{font:500 11px var(--f-mono);color:var(--spring);text-align:center;letter-spacing:0;min-height:28px;line-height:1.4}
-.readout span{display:block;color:var(--dim)}
-
-/* ===== Estrutura ===== */
-main{position:relative;z-index:2;margin-left:calc(var(--side) + env(safe-area-inset-left,0px))}
-.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.pad{padding-left:28px;padding-right:28px}
-section{padding-block:96px 24px;scroll-margin-top:12px}
-.eyebrow{display:flex;align-items:center;gap:12px;font:500 12.5px var(--f-mono);color:var(--spring);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
-.eyebrow::after{content:"";flex:0 0 60px;height:1px;background:linear-gradient(90deg,var(--spring),transparent)}
-h1,h2,h3{font-family:var(--f-display);line-height:1.08;margin:0;text-wrap:balance}
-h2{font-size:clamp(34px,5.4vw,58px);font-weight:700;letter-spacing:-.01em}
-h2 em{font-style:normal;color:var(--neon);text-shadow:0 0 18px rgba(63,208,255,.55)}
-section.on h2 em{animation:neonOn 1.1s}
-@keyframes neonOn{0%{opacity:.2;text-shadow:none}10%{opacity:1}14%{opacity:.3}22%{opacity:1;text-shadow:0 0 30px var(--neon),0 0 60px var(--neon)}100%{opacity:1}}
-.lead{color:var(--dim);max-width:62ch;margin:16px 0 38px;font-size:17px}
-
-/* ===== Hero ===== */
-.hero{min-height:auto;padding-block:84px 40px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px;align-items:center}
-.kicker{font:500 13px var(--f-mono);color:var(--dim);letter-spacing:.08em}
-.kicker b{color:var(--spring);font-weight:500}
-h1{font-size:clamp(34px,4.3vw,54px);font-weight:700;letter-spacing:-.02em;margin:10px 0 6px}
-.role{font:600 clamp(18px,2vw,24px) var(--f-display);color:var(--neon);text-shadow:0 0 14px rgba(63,208,255,.6);letter-spacing:.02em}
-.who{display:flex;align-items:center;gap:22px}
-@media (max-width:560px){.who{flex-wrap:wrap;gap:14px}}
-.avatar{position:relative;flex:0 0 auto;width:108px;height:108px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--panel);border:2px solid var(--neon);box-shadow:0 0 20px rgba(63,208,255,.6),0 0 46px rgba(139,123,255,.3),inset 0 0 16px rgba(63,208,255,.25)}
-.avatar span{font:700 36px var(--f-display);color:var(--neon);text-shadow:0 0 14px rgba(63,208,255,.7)}
+/* ===== Painel ===== */
+.rail{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;scrollbar-width:none;padding-block:64px 44px;display:flex;flex-direction:column;justify-content:space-between;gap:28px}
+.avatar{position:relative;width:92px;height:92px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--panel);border:2px solid var(--neon);box-shadow:0 0 18px rgba(63,208,255,.45)}
+.avatar span{font:700 30px var(--f-display);color:var(--neon)}
 .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.mtoggle{font:500 11px var(--f-mono);letter-spacing:.03em;color:var(--dim);background:transparent;border:1px solid var(--line);border-radius:8px;padding:6px 9px;cursor:pointer;transition:color .2s,border-color .2s}
-.mtoggle:hover,.mtoggle[aria-pressed="true"]{color:var(--neon);border-color:var(--neon)}
-footer .mtoggle{font-size:12px}
-html.calm{scroll-behavior:auto}
-.calm .track{animation-play-state:paused!important}
-.calm #glow,.calm #bgReveal{display:none}
-.calm .caret,.calm .status::before,.calm section.on h2 em,.calm .side.zap::after,.calm .side.zap .ind{animation:none}
-.calm .ind{transition:none}
-.calm .rv{transition:none;transform:none!important;opacity:1!important}
-.calm .card:hover,.calm .btn:hover{transform:none}
-.hero p.intro{color:var(--dim);font-size:17px;max-width:58ch;margin:18px 0 0}
-.hero p.intro+p.intro{margin-top:10px}
-.values-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;padding-bottom:16px}
-.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;font:600 14px var(--f-mono);letter-spacing:.03em;text-decoration:none;border:1px solid var(--line);background:rgba(12,19,36,.7);color:var(--ink);transition:border-color .2s,box-shadow .2s,transform .2s,background .2s;cursor:pointer}
-.btn:hover{border-color:var(--neon);box-shadow:0 0 16px rgba(63,208,255,.35);transform:translateY(-2px)}
-.btn.primary{background:var(--neon);color:var(--void);border-color:var(--neon);box-shadow:0 0 22px rgba(63,208,255,.45)}
-.btn.primary:hover{box-shadow:0 0 34px rgba(63,208,255,.75)}
-.stats{display:flex;flex-wrap:wrap;gap:34px;margin-top:38px}
-.stats div{border-left:2px solid var(--neon);padding-left:14px;box-shadow:-6px 0 12px -8px var(--neon)}
-.stats strong{display:block;font:700 34px/1 var(--f-display);font-variant-numeric:tabular-nums}
-.stats span{display:block;font-size:13px;color:var(--dim);max-width:150px;margin-top:6px}
-.term{position:relative;min-width:0;background:rgba(9,14,28,.88);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 0 0 1px rgba(63,208,255,.08),0 30px 80px -30px rgba(63,208,255,.35)}
-.term-top{display:flex;align-items:center;gap:7px;padding:12px 16px;border-bottom:1px solid var(--line);font:500 12px var(--f-mono);color:var(--dim)}
+.kicker{font:500 12.5px var(--f-mono);color:var(--dim);letter-spacing:.04em;margin-top:22px}
+.kicker b{color:var(--spring);font-weight:500}
+h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.12;text-wrap:balance}
+h1{font-size:clamp(36px,3.6vw,46px);font-weight:700;letter-spacing:-.01em;margin-top:8px}
+.role{font:600 20px var(--f-display);color:var(--neon);margin-top:6px}
+.pitch{color:var(--dim);margin-top:14px;max-width:34ch}
+#nav{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+#nav a{display:flex;align-items:center;gap:14px;padding:8px 0;text-decoration:none;font:500 12.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);transition:color .25s}
+#nav i{display:block;width:28px;height:1px;background:var(--dim);transition:width .35s cubic-bezier(.3,.8,.3,1),background .25s,box-shadow .25s}
+#nav a:hover{color:var(--ink)}
+#nav a:hover i{width:44px;background:var(--ink)}
+#nav a.active{color:var(--neon)}
+#nav a.active i{width:68px;height:2px;background:var(--neon);box-shadow:0 0 10px var(--neon)}
+#nav a.lit{animation:lit .7s}
+@keyframes lit{0%{opacity:.35}18%{opacity:1}30%{opacity:.5}46%{opacity:1}}
+.rail-foot{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;font:600 13.5px var(--f-mono);letter-spacing:.02em;text-decoration:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.btn:hover{border-color:var(--neon);box-shadow:0 0 14px rgba(63,208,255,.3)}
+.btn.primary{background:var(--neon);color:var(--void);border-color:var(--neon)}
+.tlink{font:500 13px var(--f-mono);color:var(--dim);text-decoration:none;transition:color .2s}
+.tlink:hover{color:var(--neon)}
+
+/* ===== Conteúdo ===== */
+main{padding-block:64px 40px;min-width:0}
+section{padding-bottom:84px;scroll-margin-top:64px}
+.sh{display:flex;align-items:center;gap:14px;font:500 12.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--spring);margin-bottom:22px}
+.sh::after{content:"";flex:1;height:1px;background:var(--line)}
+.prose p{color:var(--dim);max-width:64ch}
+.prose p+p{margin-top:14px}
+.prose strong{color:var(--ink);font-weight:500}
+.term{margin-top:28px;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;max-width:560px}
+.term-top{display:flex;align-items:center;gap:7px;padding:11px 16px;border-bottom:1px solid var(--line);font:500 12px var(--f-mono);color:var(--dim)}
 .term-top i{width:10px;height:10px;border-radius:50%;background:var(--line)}
-.term-top i:nth-child(1){background:#ff5f6d}.term-top i:nth-child(2){background:var(--warn)}.term-top i:nth-child(3){background:var(--spring)}
 .term-top span{margin-left:8px}
-.term pre{margin:0;padding:20px 22px;font:400 13.5px/1.75 var(--f-mono);color:#cfe0f5;overflow-x:auto}
+.term pre{margin:0;padding:18px 20px;font:400 13px/1.75 var(--f-mono);color:#cfe0f5;overflow-x:auto}
 .k{color:var(--neon)}.s{color:var(--spring)}.c{color:#8a9cbd}.n{color:var(--warn)}
-.caret{display:inline-block;width:8px;height:16px;background:var(--neon);vertical-align:-3px;box-shadow:0 0 8px var(--neon);animation:blink 1s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}
 
-/* ===== Carrossel de hard skills ===== */
-.band{position:relative;z-index:2;margin-left:calc(var(--side) + env(safe-area-inset-left,0px));border-block:1px solid var(--line);background:rgba(9,14,28,.95);padding-block:14px;display:grid;gap:12px;overflow:hidden;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.band::before,.band::after{content:"";position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--neon),transparent);opacity:.6}
-.band::before{top:0}.band::after{bottom:0}
-.track{display:flex;flex-wrap:nowrap;gap:14px;width:max-content;animation:slide 70s linear infinite!important;will-change:transform}
-.track.rev{animation-direction:reverse!important;animation-duration:84s!important}
-.band:hover .track{animation-play-state:paused}
-@keyframes slide{to{transform:translateX(-50%)}}
-.pill{flex:0 0 auto;display:inline-flex;align-items:center;gap:12px;padding:10px 22px;border-radius:999px;border:1px solid var(--line);background:var(--panel);white-space:nowrap;font:600 19px var(--f-display);letter-spacing:.02em;transition:border-color .2s,box-shadow .2s,color .2s}
-.pill small{font:500 12px var(--f-mono);color:var(--spring);letter-spacing:.06em;text-transform:uppercase}
-.pill:hover{border-color:var(--neon);color:var(--neon);box-shadow:0 0 14px rgba(63,208,255,.4)}
-.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon)}
-
-/* ===== Cartões com holofote ===== */
-.card{position:relative;min-width:0;background:linear-gradient(180deg,rgba(17,27,51,.85),rgba(10,16,32,.85));border:1px solid var(--line);border-radius:18px;padding:26px;overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s}
-.card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
-  background:radial-gradient(360px circle at var(--cx,50%) var(--cy,50%),rgba(63,208,255,.14),transparent 60%)}
-.card:hover{transform:translateY(-4px);border-color:rgba(63,208,255,.6);box-shadow:0 0 0 1px rgba(63,208,255,.2),0 20px 50px -24px rgba(63,208,255,.55)}
-.card:hover::before{opacity:1}
-.card>*{position:relative}
-
-/* ===== Sobre ===== */
-.about{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:44px;align-items:start}
-.about p{color:var(--dim);margin:0 0 16px;max-width:62ch}
-.about p strong{color:var(--ink)}
-.edu{margin-top:24px;padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:rgba(12,19,36,.7)}
-.edu b{display:block;font:600 17px var(--f-display)}
-.edu span{display:block;color:var(--dim);font-size:14px}
-.edu i{font:500 12px var(--f-mono);font-style:normal;color:var(--spring)}
-.values{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.val{padding:22px 18px;text-align:left}
-.val .gl{font:600 30px var(--f-mono);color:var(--neon);text-shadow:0 0 14px rgba(63,208,255,.6);line-height:1}
-.val h3{font-size:19px;margin:14px 0 4px}
-.val p{margin:0;font-size:13.5px;color:var(--dim)}
-
-/* ===== Arsenal ===== */
-.arsenal{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.ars .gl{font:600 13px var(--f-mono);color:var(--spring);letter-spacing:.08em;text-transform:uppercase}
-.ars h3{font-size:22px;margin:6px 0 16px}
-.ars ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.ars li{display:flex;align-items:center;gap:10px;font-size:15px}
-.ars li::before{content:"›";font:600 15px var(--f-mono);color:var(--neon)}
-
-/* ===== Projetos ===== */
-.projects{display:grid;gap:22px}
-.proj{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:26px;padding:22px}
-.proj:nth-child(even){grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
-.proj:nth-child(even) .cover{order:2}
-.cover{position:relative;min-height:230px;border-radius:14px;border:1px solid var(--line);overflow:hidden;padding:18px;display:flex;flex-direction:column;justify-content:space-between;
-  background:radial-gradient(circle at 80% 15%,rgba(63,208,255,.18),transparent 55%),radial-gradient(circle at 15% 90%,rgba(127,209,75,.12),transparent 50%),
-  repeating-linear-gradient(0deg,transparent 0 27px,rgba(63,208,255,.07) 27px 28px),repeating-linear-gradient(90deg,transparent 0 27px,rgba(63,208,255,.07) 27px 28px),#080d1b}
-.cover .num{font:700 76px/0.9 var(--f-display);color:transparent;-webkit-text-stroke:1.5px var(--neon);text-shadow:0 0 22px rgba(63,208,255,.4);opacity:.85}
-.cover .glyph{position:absolute;right:18px;top:16px;font:600 26px var(--f-mono);color:var(--spring);text-shadow:0 0 12px rgba(127,209,75,.6)}
-.cover code{display:block;font:500 12.5px/1.6 var(--f-mono);color:#cfe0f5;background:rgba(6,10,20,.75);border:1px solid var(--line);border-radius:10px;padding:10px 12px;overflow-x:auto;white-space:pre}
-.proj:hover .cover .num{-webkit-text-stroke-color:#fff;text-shadow:0 0 30px var(--neon)}
-.cover canvas.rain{position:absolute;inset:0;width:100%;height:100%;opacity:.5;-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent);mask-image:linear-gradient(180deg,#000 55%,transparent)}
-.cover>span{position:relative}
-.proj:hover .cover canvas.rain,.pmid:hover .cover canvas.rain{opacity:.85}
-.pbody{display:flex;flex-direction:column;gap:12px;min-width:0}
-.pmeta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font:500 12px var(--f-mono);color:var(--dim);letter-spacing:.05em;text-transform:uppercase}
-.status{display:inline-flex;align-items:center;gap:7px;padding:3px 11px;border-radius:999px;border:1px solid rgba(127,209,75,.45);color:var(--spring);text-transform:none;letter-spacing:0}
-.status::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--spring);box-shadow:0 0 8px var(--spring);animation:pulse 2s infinite}
-@keyframes pulse{50%{opacity:.25}}
-.proj h3{font-size:clamp(24px,3vw,32px)}
-.proj p{margin:0;color:var(--dim);font-size:15.5px}
-.pts{margin:0;padding:0;list-style:none;display:grid;gap:7px;font-size:14.5px;color:var(--dim)}
+.rows{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.row{display:grid;grid-template-columns:132px minmax(0,1fr);gap:22px;padding:18px;margin-inline:-18px;border-radius:14px;border:1px solid transparent;transition:background .25s,border-color .25s,opacity .25s}
+.row:hover{background:rgba(13,21,40,.9);border-color:var(--line)}
+@media (hover:hover){.rows:hover .row:not(:hover){opacity:.5}}
+.meta{font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);padding-top:5px;font-variant-numeric:tabular-nums}
+.meta.code{font-size:15px;color:var(--neon);letter-spacing:0;padding-top:2px}
+.row h3{font-size:19px;font-weight:600;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.row h3 a{text-decoration:none;transition:color .2s}
+.row h3 a::after{content:" ↗";font:500 13px var(--f-mono);color:var(--dim);transition:color .2s}
+.row:hover h3 a,.row:hover h3 a::after{color:var(--neon)}
+.row h3 small{font:500 13.5px var(--f-body);color:var(--dim)}
+.row p{color:var(--dim);font-size:15px;margin-top:6px;max-width:62ch}
+.chip{font:500 11.5px var(--f-mono);color:var(--spring);border:1px solid rgba(127,209,75,.4);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.pts{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:5px;color:var(--dim);font-size:14.5px;max-width:62ch}
 .pts li{display:grid;grid-template-columns:16px 1fr;gap:6px}
-.pts li::before{content:"✔";color:var(--spring);font-size:12px;line-height:1.9}
-.tags{display:flex;flex-wrap:wrap;gap:7px;margin:0;padding:0;list-style:none}
-.tags li{font:500 12px var(--f-mono);padding:4px 10px;border-radius:7px;background:rgba(63,208,255,.08);border:1px solid rgba(63,208,255,.22);color:#a9e6ff}
-.plinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
-.plinks a{font:600 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:9px 14px;border-radius:9px;border:1px solid var(--neon);color:var(--neon);transition:background .2s,color .2s,box-shadow .2s}
-.plinks a:hover{background:var(--neon);color:var(--void);box-shadow:0 0 18px rgba(63,208,255,.6)}
-.mid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px}
-.pmid{display:flex;flex-direction:column;gap:12px}
-.pmid .cover{min-height:104px;flex-direction:row;align-items:flex-end;gap:16px;padding:14px}
-.pmid .cover .num{font-size:46px;flex:0 0 auto}
-.pmid .cover code{flex:1;min-width:0;font-size:11.5px}
-.pmid h3{font-size:24px}
-.pmid p{margin:0;color:var(--dim);font-size:15px}
-.pmid .note{font-size:13px}
-.mini h3{font-size:19px!important}
-.mk{font:500 11.5px var(--f-mono);color:var(--spring);letter-spacing:.08em;text-transform:uppercase}
-.subhead{font:500 13px var(--f-mono);color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin:46px 0 16px;display:flex;gap:12px;align-items:center}
-.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
-.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px}
-.mini .card{display:flex;flex-direction:column;gap:10px}
-.mini h3{font-size:22px}
-.mini p{margin:0;color:var(--dim);font-size:15px}
-
-/* ===== Qualidade ===== */
-.qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
-.qa .code{font:600 30px var(--f-mono);color:var(--neon);text-shadow:0 0 14px rgba(63,208,255,.55)}
-.qa h3{font-size:21px;margin:10px 0 6px}
-.qa p{margin:0;color:var(--dim);font-size:15px}
-
-/* ===== Jornada ===== */
-.manifesto{padding:34px 34px 30px;border-radius:20px;border:1px solid rgba(63,208,255,.35);background:linear-gradient(135deg,rgba(63,208,255,.10),rgba(139,123,255,.07) 60%,rgba(12,19,36,.8));box-shadow:0 0 40px -20px var(--neon);margin-bottom:34px}
-.manifesto small{font:500 12px var(--f-mono);color:var(--spring);letter-spacing:.1em;text-transform:uppercase}
-.manifesto blockquote{margin:12px 0 0;font:600 clamp(22px,3vw,32px)/1.3 var(--f-display);text-wrap:balance}
-.manifesto blockquote em{font-style:normal;color:var(--neon);text-shadow:0 0 14px rgba(63,208,255,.5)}
-.chapters{position:relative;display:grid;gap:18px;padding-left:34px}
-.chapters::before{content:"";position:absolute;left:10px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--neon),var(--neon-2),var(--spring));box-shadow:0 0 12px var(--neon)}
-.chap{position:relative}
-.chap::before{content:"";position:absolute;left:-30px;top:30px;width:14px;height:14px;border-radius:50%;background:var(--void);border:2px solid var(--neon);box-shadow:0 0 12px var(--neon)}
-.chap .when{font:500 12.5px var(--f-mono);color:var(--dim);font-variant-numeric:tabular-nums}
-.chap .where{font:500 12px var(--f-mono);color:var(--spring);letter-spacing:.06em;text-transform:uppercase;margin-left:8px}
-.chap h3{font-size:23px;margin:8px 0}
-.chap p{margin:0;color:var(--dim);max-width:68ch}
-.take{margin-top:14px;padding:11px 16px;border-left:3px solid var(--spring);background:rgba(127,209,75,.07);border-radius:0 10px 10px 0;font-size:14.5px;max-width:68ch}
-.take small{display:block;font:500 11px var(--f-mono);color:var(--spring);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
-
-/* ===== Jornada e arsenal compactos ===== */
-.tline{list-style:none;margin:0;padding:0;border-left:2px solid var(--neon);box-shadow:-8px 0 14px -10px var(--neon);max-width:820px}
-.tline li{position:relative;display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;padding:14px 0 14px 24px}
-.tline li+li{border-top:1px solid var(--line)}
-.tline li::before{content:"";position:absolute;left:-7px;top:21px;width:12px;height:12px;border-radius:50%;background:var(--void);border:2px solid var(--neon);box-shadow:0 0 10px var(--neon)}
-.tline .when{font:500 12.5px var(--f-mono);color:var(--dim);font-variant-numeric:tabular-nums;padding-top:5px}
-.tline h3{font-size:20px;display:inline}
-.tline .where{font:500 12px var(--f-mono);color:var(--spring);letter-spacing:.06em;text-transform:uppercase;margin-left:10px}
-.tline p{margin:4px 0 0;color:var(--dim);font-size:15px}
-.edu-line{margin:22px 0 0;color:var(--dim);font-size:15px}
-.edu-line b{color:var(--ink)}
-.stackc{margin:0;padding:8px 26px;max-width:820px}
-.stackc>div{display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;padding:14px 0}
-.stackc>div+div{border-top:1px solid var(--line)}
-.stackc dt{font:500 12.5px var(--f-mono);color:var(--spring);letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
-.stackc dd{margin:0;font-size:15.5px}
-@media (max-width:620px){.tline li,.stackc>div{grid-template-columns:1fr;gap:2px}.tline .where{display:block;margin:2px 0 0}}
-
-/* ===== Contato ===== */
-.contact{position:relative;margin-top:30px;padding:56px 32px;border-radius:24px;text-align:center;overflow:hidden;border:1px solid rgba(63,208,255,.4);
-  background:radial-gradient(circle at 50% 0%,rgba(63,208,255,.2),transparent 60%),rgba(9,14,28,.9);box-shadow:0 0 60px -26px var(--neon)}
-.contact h2{margin-bottom:14px}
-.contact p{color:var(--dim);max-width:58ch;margin:0 auto}
-.mail{display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;margin:28px 0 22px;padding:10px 12px 10px 20px;border-radius:12px;border:1px solid var(--line);background:var(--panel)}
-.mail span{font:500 16px var(--f-mono);user-select:all;word-break:break-all}
-.mail button{font:600 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:9px 14px;border-radius:8px;border:1px solid var(--neon);background:transparent;color:var(--neon);cursor:pointer}
+.pts li::before{content:"✔";color:var(--spring);font-size:11px;line-height:2.1}
+.tags{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.tags li{font:500 12px var(--f-mono);padding:3px 10px;border-radius:999px;background:rgba(63,208,255,.08);color:#a9e6ff}
+.rlinks{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px}
+.rlinks a{font:600 12.5px var(--f-mono);letter-spacing:.04em;color:var(--neon);text-decoration:none;border-bottom:1px solid rgba(63,208,255,.35)}
+.rlinks a:hover{border-bottom-color:var(--neon)}
+.sub{font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:26px 0 8px}
+.after{margin-top:20px;color:var(--dim);font-size:15px}
+.after b{color:var(--ink);font-weight:500}
+.stack{margin:0;display:grid;gap:0}
+.stack>div{display:grid;grid-template-columns:132px minmax(0,1fr);gap:22px;padding:13px 0}
+.stack>div+div{border-top:1px solid var(--line)}
+.stack dt{font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+.stack dd{margin:0;font-size:15.5px}
+.cta h3{font-size:clamp(26px,3.4vw,36px);font-weight:700}
+.cta h3 em{font-style:normal;color:var(--neon)}
+.cta p{color:var(--dim);max-width:58ch;margin-top:12px}
+.mail{display:inline-flex;flex-wrap:wrap;align-items:center;gap:10px;margin:22px 0 16px;padding:8px 10px 8px 16px;border-radius:12px;border:1px solid var(--line);background:var(--panel)}
+.mail span{font:500 15px var(--f-mono);user-select:all;word-break:break-all}
+.mail button{font:600 12px var(--f-mono);letter-spacing:.04em;padding:8px 12px;border-radius:8px;border:1px solid var(--neon);background:transparent;color:var(--neon);cursor:pointer}
 .mail button:hover{background:var(--neon);color:var(--void)}
-.contact .btns{justify-content:center;margin-top:0}
-footer{padding-block:40px 48px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:var(--dim);font:500 12.5px var(--f-mono);letter-spacing:.04em}
-footer a{text-decoration:none;margin-left:18px}
-footer a:hover{color:var(--neon)}
+footer{border-top:1px solid var(--line);padding-top:22px;color:var(--dim);font:500 12.5px var(--f-mono)}
 
-/* ===== Entrada suave (parte de um estado visível) ===== */
-.rv{transition:transform .8s cubic-bezier(.2,.7,.2,1),opacity .8s}
-.js .rv:not(.in){transform:translateY(22px);opacity:.55}
-
-/* ===== Celular: barra lateral vira barra inferior ===== */
-@media (max-width:860px){
-  :root{--side:0px}
-  .side{top:auto;right:0;width:auto;height:auto;flex-direction:row;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));border-right:0;border-top:1px solid var(--line)}
-  .side::before{left:0;right:0;top:-1px;bottom:auto;width:auto;height:1px;background:linear-gradient(90deg,transparent,var(--neon) 30%,var(--neon-2) 70%,transparent)}
-  .side::after{top:-2px;left:-140px;width:140px;height:3px;right:auto;background:linear-gradient(90deg,transparent,#fff,var(--neon),transparent)}
-  .side.zap::after{animation:beamH .8s ease-out}
-  @keyframes beamH{0%{left:-140px;opacity:1}100%{left:100%;opacity:0}}
-  .brand,.readout,.side .mtoggle{display:none}
-  .nav{flex-direction:row;margin:0;gap:0;justify-content:space-between}
-  .nav li{flex:1}
-  .nav a{padding:7px 2px}
-  .nav .l{font-size:11px;letter-spacing:0}
-  .nav li.m-hide{display:none}
-  .nav .g{font-size:15px}
-  .ind{left:0;right:auto;top:4px;height:auto;bottom:4px}
-  .ind::before{left:50%;top:-5px;width:50%;height:3px;transform:translateX(-50%);border-radius:0 0 4px 4px}
-  main{padding-bottom:80px}
-  .pad{padding-left:4px;padding-right:4px}
-  .hero,.about,.proj,.proj:nth-child(even){grid-template-columns:1fr}
-  .proj:nth-child(even) .cover{order:0}
-  .hero{padding-top:48px}
-  section{padding-block:72px 16px}
-  .chapters{padding-left:28px}
-  .manifesto{padding:24px 20px}
-  .contact{padding:40px 18px}
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .rail{position:static;height:auto;overflow:visible;padding-block:44px 8px;gap:22px}
+  .rail nav{display:none}
+  main{padding-top:36px}
+  section{padding-bottom:56px;scroll-margin-top:0}
+  .sh{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--void);padding-block:12px;margin-bottom:10px}
+  .row{grid-template-columns:minmax(0,1fr);gap:4px;margin-inline:0;padding:14px 0;border-radius:0}
+  .row:hover{background:transparent;border-color:transparent}
+  .row+.row{border-top:1px solid var(--line)}
+  .stack>div{grid-template-columns:minmax(0,1fr);gap:2px}
 }
-@media (max-width:420px){.avatar{width:96px;height:96px}.avatar span{font-size:32px}.values{grid-template-columns:1fr}.stats{gap:22px}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#nav a.lit{animation:none}#glow{display:none}}
 </style>
 </head>
 <body>
-<a class="skip" href="#home">Pular para o conteúdo</a>
-<canvas id="bgBase" aria-hidden="true"></canvas>
-<canvas id="bgReveal" aria-hidden="true"></canvas>
+<a class="skip" href="#sobre">Pular para o conteúdo</a>
 <div id="glow" aria-hidden="true"></div>
 
-<aside class="side" id="side" aria-label="Navegação">
-  <a class="brand" href="#home" aria-label="Início">MA<b>.java</b><small>BACK-END</small></a>
-  <ul class="nav" id="nav">
-    <li><a href="#home" class="active"><span class="g">~/</span><span class="l">Início</span></a></li>
-    <li><a href="#projetos"><span class="g">&lt;/&gt;</span><span class="l">Projetos</span></a></li>
-    <li><a href="#qualidade"><span class="g">✓</span><span class="l">Testes</span></a></li>
-    <li><a href="#jornada"><span class="g">→</span><span class="l">Jornada</span></a></li>
-    <li class="m-hide"><a href="#arsenal"><span class="g">{ }</span><span class="l">Arsenal</span></a></li>
-    <li><a href="#contato"><span class="g">#</span><span class="l">Contato</span></a></li>
-    <li aria-hidden="true" style="position:absolute;inset:0;pointer-events:none"><div class="ind" id="ind"></div></li>
-  </ul>
-  <div class="readout" id="readout"><span>GET</span>/inicio 200</div>
-  <button type="button" class="mtoggle" data-on="Pausar" data-off="Animar" aria-pressed="false">Pausar</button>
-</aside>
+<div class="shell">
+<header class="rail">
+  <div>
+    <div class="avatar"><span aria-hidden="true">MA</span><img src="data:image/webp;base64,UklGRmgeAABXRUJQVlA4IFweAAAwpwCdASpAAUABPmEuk0akIqGhJVQrGIAMCWduvgZ2QvlGgSE6xGSUdz5/s5fh/Bfs7duf7bm+w1mUl9QUJGX8ee/9/Mb/Ff+klbWcdHU4Gf1Bf/MjzdcW+7quQr/AhXtAgHp8IkvBYhKiIXkMrpCftF76jvl50AQCcffGcy7j1CXl//5x7LDE2yLyf10qriAWIh/nBeQqbdnV9MewB4JluEDJZRG/agwH3041Du3k+uMEPFDtvTTWPzwNvhCofC5fnexeeyGP5On/5LUYmVOzroH56FvdgOivnRQnMNDN3r0uEcrOl3cGYP08Aqjb17u4cYwfJmPSkH045Do3ficFrhRcNSAwVW8oRUPzGAAHptcbLrJ9FbEhDBDimbVGTTSjF+c9ed9aP82E0GbqHk3qKcuSXCj/Rk9AzF33lv5s/wIoVeQeFCPE1SuBrhHbQWpPSHrf85k4NUTvk8Gg+zETO5mLx78dUZ22GdpVCVoDksMConXIA0izxA7LEHc19w2SfErqVpKXqjbBzFfqGxvazJ1uhzGtIVdOH498pbr/Ff+FyizgMj4SLm8F8CgJVsukfwfPbEjwyJQxjFK8Y1RlTAxbSHWiGqTy3D2kfL9fbGea6yuihnXD4oqw8Et8XiTwk8evNtBIYCmH1RlzWxCGmeJU6g2Y7b0B7Ng3sz3qCF/2IYbnWLH1WGFVQb08378y/tRqwZ/BxvOsy3KjCdKbsOGZnekOQxR66HlZ7Zac/UTZZVKZfNvnrGH0s/qStfDc/nuCLAE+qoIxelYLsrJXMc2S7HCxIunqLlyt0fPNFQtYaHpoLQzD60lAAnW+cqDXs0J811Ypjx5YOeY1WQxJPmxtUd1Wf5p/n7EOMFvNRhreu6uxriPNTxZYJbhPuVcvjCFDYiHe2I2NYXqm4yWzs+PtG8JHrJ8a2dilf2YVTuYIVU/j90gEHCT7YdTiX9YB8nwkl+L3cktnm7IzUypDVeEvdJc7P24KE1b3uX4jWc8bx7EtLIAaYbjNuHsbGJJRkGVLBif6Av+bD3h6tVb3Hks3wZHbXFuIEU2s10FmsBZC0+Y9Hj8+//sursfaG5GCYVdP7Yg8QNn+gs7O0XONwBCg2eqWPxQkWjEv7wcT/Xx7/xWxlklHjBcAscMaQ3UjcScAHNrnXgbyUJbbHLTj6iBmb4MKfOUMQlALqLzk89+v5IVAw+VFfrZqGLYgtMlumQmRiRCqvMIW4psyeRTtHrLthiUHX331P8H4KakYMHhdN9sy883iZ3kdWqWmoRU4hRm7VoUy06YU5PwPlEjfvQSnWg8Dm0nMZ1jhu+VVukGRpveZf/FzMxzFWymBocYiKy4VwCVJ/FMTk++mfqXRAOrXdzpaSnFurRg1yWAtjX4OaYggB1NH0asqOksQ4M1hcwb6ujMG+NdjF21o/BdvNJvPU9vz6Bt2p27nXNl1e3Nf+0bPhGglfJitpOmRsYqIMOyi68fsNzb5AqncDd8zD2kPozPvawO+CoTU+pngKrHAsVU1V9pDXg2hHbrRMWcn/PZ5A3WGFYz54SYEmR8xrGI2NGJ2zddOghqTO8ETxBn0wd+7VtMlHvM1+LYcEGZtAbLZgDZjcm8jT7cKsVBft6S3BAcS7w2Bu2XmQmSQsFzEu3hlExU5TOIKeo5c4yRpMCzqPOUThxsGBJSPu3vhOBhVbC6qgFsQl7bO/pVqWe03opthF8Vsab3Cd9jP32w/YCbvezBxyhSGDhos8dyOm4M90AG21NSmL3BxL/VNASVS3kGGX1cY4+OiQNTr6HdLsAD+y2+YEYHxrFBhmNwcAmtrIojjYg5gEs5SsfNwuIR28HGy0a5av+oznFHWCW1Fa6TilitwCEshKCjufULc5E0XuVLnQ/ddMM7LC0Cdtp7eYQyt5QbVhJ4mWpl/BfSyzUqqXN1GLs+Q3z58vj8ibibB8OQRSD4S4e//R9pcUwfmFws4oA9toTmBXAl4NCMlb13DlGgDMsj5uiqpZ7znV3P/vZX6RSqvvmkD8GofquaFVHxusPAocbRTlNDgq336j4YS1pLPbCrSlpRboNMI63h6oiTAQGVLAbD3Csm8tdsrgkxU9G08mSWcHDnT1bCTJc1BWB+wepw/XF52C//kCArR+tpVSmbaZYRmz0QEO3dhjKYnoBzw/ABz6CtptDibPfl6vyEybIHWAkTUwsMaj+lxZhX1NoQtYHoOD0Ja47KQHcWr7iHBLgmCCAyCMDYs4bCpu0Wiv+Qn1Cy1Jv4/oRIoMhGiWOWZSDIyNImkd5nHa2ei4dHZLSZqCJAU8K0J2tcuCVYVtJxUOwq46AfSOteNpPCboScGCwkTUJ/hinwQgpCd5AUqWOLF7FVzsk+OKwongsq1nEQqCqspqvmzuHdn/rDZjstYvedMdkMZYGWtRd7hW3W6uEIWUbBBhscV3Gh7e554wPn2W2dOyzTypsyv0/oWZP7VWc5x2tYbMX5a+mG0HFT38FTO+X866r1OSMJBr8ak/mPm1/9lsCqt5KdSGzU3qXme8xYJTLvNbVilz4nwJcWoMHThA/BhvYtc9CK2ZzRo7JyMIYvzt9Pjea6Y3nK7bAvrtTdGXexLXwo2gqBe6cE/d0LJEChatLBvc9fYiS8EKHqxzJRMd07LUBfW92yJbqFw2dWMJ95gUxdD6s3wDO7RIlltP+mktOQYPoWzsdbuH0KNfiAj6xsWGlIYwD+Yr1t3EtyJBow72DafdhfgcAa0bu3nwosWOC6/UGabhciQYzsm2EdzwhxNMbyphFWrotnpgEl7mAHRSwFHawOHLWSl++y16BOZi1YmPtnsklk+oKdKkAdpYzfAWIJrkW2ZgXwMZArdln2P8aXHWKHQ3iRhdSFhXQRKfszTbNXOXX/69peIE1K+FMrwAA47KKOpq1etcL5M7/kc6syl277aNVphy5mzm4i/A6ljL8C1lOwDR9Mw+NVxTKe2YTje/J4tK72RAwwkO6EmwOmYG7ZnRYLh9WA3ExklX/nfIioB2HqGDOL+q+6TLlx3xJnNlnJfQtPRFiVPfdrjgo+IJ8WaiavkxOY8RD/H6cVco/OZnKQ4ZA9dcD9BxLHSPcvP4bujYfLZVfqp0XXSZ8qML9ymh5Hq5cMqOnPAO+CVbhI3OnrZ15mo88HVCmUFv6kdTG90PouNhlpkNEkNv1ihlvAjnGZhXW/VOpfk7yWtntq2OxjnI9aPgWrkyD5y2R4EJG8LfZnAo0JkgRBnjXu8VUUeWgl6uie7uUhiTbntSCmpH/8+k8yiZWA03aPI50Yze2EFvp9GHIQFegmlnNtwiQoDF73gsmzSGSA0yA9OxUQHqiORdNgsA8mo4zzCogYa0AJdjI7Udm63KR/lEtfAc5sGaKXKYjsqidsDm82puuXKFnlTiBQGkBAmxbRnFEHNfkNj3c88noOJn/CyTbV2OS4v3Ipx4+f2FQvyVc9F7c6GvMbeZar5Qr+tMh80MIED4PpTcR35AVNEZacSNdJ06c0hWAOH2gaWX2laF+mgNfDxLRUYjR2WmsvrA3360FjUXHb7+EhwLdvw9jpjjRpm4815woM/R0NWCQdV0wwYe2wEOYClOfimQMprJ3l3qHR79cu8W518QpM9Svcx/kQmUPHAMu4DG0AWkhl/RRKWMVSTjqLZMUZCXK/soDqtCS0tVjQITY9U3vS75HKV8TrPo4u3wBW0mRF44qhlXAg99Y9NooqQSy1BrUsuw1tVGikFGNGgZk+Ju7sJee1w5hx5P7Pke20cNuOJgGn4wZsX4OXD1fkGUSkvLbhjHWngLxhx7RlIwgVsRdKhFDncLAhyJ4igHHqIz9Yu5LBfU3KxmK3omQuB31eFvO39B6r30923jnZvRtsX99uYEQ0lLFLmXOp2UpSZwimqtVSIK0ay4ZTcbankjdjjpiu8AOdm+9+1oysJdEgmRW8aycYJ4JwTG5MxE12J3PIoi+7XID5N2ndieytWyZcvB9tkW+bxefyNOws+P23Os7CtuTcx6gH63+9J9YTyMfwUEPtv0DgUoyrRYsHnG3aceLPiF6rUA1Hh6Mer2Etz/lSOgRXwDC3dLSz2TsefnSQoUiT8+wiLGn2+vKOHW71grWDzBLH1QAl3Mdgv0PuIPvDANLyOQymSmAbK1hsmupS6qJNICIeLQVKuXLr3jfnRE5APUDQgBqVGhrnn+XsW8GKGhzl3uMp/wuAO0Iodli/AbR4PCXsu66pgoM+/XB65kxBvhqeTSWxqZDZ8V6n0xToA3gvnmu2n2YfqKu0Jn5Fzs495c63y5vSdMLBpo8UCwbOe4pJiRCHdPEbXtlYi+lBHM2JWNZINegEHg1Zxj9lFBKKM1fSA+olZc4nOoFIJPNHHTQC7dbFYujCiJ+bKIPSVIIkI3k8ygVDuhFwc8WCXK73jwnIljiYlQj9FvHmmwtWqoPrWMrUv6tw7jl0JFFNsFpp5QxpT1jnFBcpaQdI70/Lc+BT68BJ1JzwVEwmWG2kJ+TeiHaA/pXX+83ecBqa6pMjcRnnSCLnctPBuoXTO0BQhDThPPaCnYu0stXnLg1G6nFibyZ42U6l0hOvtM0EYlk/ZLP91p0tiVhSNeVWIss8E4rEY7zVzlW6ewRfF5lUQBTeFJ+X17+JR7yXol50Yp9XIkfshLTtHauSxKcC7xRHh1XbiSLZot8mOg6DF2zq8cudb2PQop2/E57CjX2Hgqp2fehTUPmig5P7sVaFc5eSDwvuMGwg7TzNwyC4BBUiLZ6xAur3fGLn7ZUbcgin/JUI7ihaYhxB533303SeUJ5XjE77w3Z1Bh5ITCh1+LgEwwN5W/80xFcm67tlXr0SOY1yOavOdTPzMWghrdqiJ4HaoxLMdC3AtP9BdUfwAVRm3NvCmF8lomowJvkXqe7loBW3Y0o80FazW5zkznHdOgIVmaamF+8tpTLaO2Qjhcg01mfIG3MLmPpYHW5lrr8AtJlGVe8dtVbP7uR4EkaXUrAKMy6Fsu+RO3CP2B2TN+lU0NAJWrIXtu67DBharHNY14i+Y3Ih3H4N5L6yAxO6cvppyz8UjafCTipFNyY060Hw7P1Q4UjWo2wZvtM62+TVcu66bOUqWWMywYHsNL+Qx2iuB+mkbRaM0F7STXcWgfFrdhBj8frwY22h2qDaqeOGHSCXLQ2Ul2dYyft+P/w/Pj6USF07RgUlXAFosEqKlCBDM2SmcnKCC3HU2HNfzlXgLjGgg/G+4rv9mKEN6aQbgAygmjK1C3wiTpy0OeO8LlskjbM0tndiW5pDLRcmZ6rGMMMrqoK1ZARyc8p0CxyoFxVxfjZk/4ba6nhlq1UZXvlFBPWhib41HpOdW4/UqFyFf/cCofVDWFgV3a0EziUnSyFDtSI24kr0X6d+GF1gjjmlVgFN0ch/uoL9iiVMAK0aT0bXwjKp1btaEGLkfFY3hFgCD6ZuKTaADHIsrod9KWgno4g5FdaQnH0Bz/NV/nw7OQXH2FqBm+tLILnw31Vkj7RGn1YE5NW6Qq6Orq5kCD9AgFW5XgEPJAKN/q7bRG4cfU6MkNa66UAncAVqVsP1qtEVcyLWpdXilZErACgztkTi1ORoPTtqrUTlEr+uC6xSHhsPGAR1+lxhbcC7xxTOLS0j0YIzoO1ETT58wV+z+ZJ8aeuQ/K7PwGGmSq8QwbFAZrMCH7NU7DQLFIaII/7Ux9DdeS9Glfs/J/qkZVILNdQtkqUoFyQ6S0dXEvIEr9tVtGWjPcqSwxJMFINP1sHh9S1VfkW8sp/X+7hu2gFQMhBWWj2IjR43mdUx1gn/YtJ/En8M5CoWl7m5tipGk8HkXWXUIGVHOnayLyCwPaLWqL8xzoelxpTkSDNs2xujnPGsn6QqDoS2gooVXBA95xKOyCeuAoRMF+EHcOBq5+vc/N6/MpdrDDp7M7lN+c+H5cMsQ6LMopJQCaasTQnycUUXK2KXbMkFDr6HB48M8G2v0jXeuM/awLnw/0z56WLGvWZcdpnksm2hfLvyY8fOXNnDRLLzs0QLSOS/L7i30xEL1aKLWWJ3mCQMRhyozGiadKm3xn2kcMxFSRQDWI+HCAQGDxz1f/BcGOnSF1NiOQCoKfO4yMZif1iY663hexgt7yGdixyey/BEtNYuRCAxPVK+IX38m1N4E4k+CH9DhMDnAhhg084LJpwBcPfXWWUjmC1t3K75W7b3NM4wCEMdVVrznZDQU3vrhRpJ5Dl3HMyZMe1ikiUNHxEWYb5mt0nhoswFZwjC4RPgviBuHbv1j4gTu786ZOVNJqTf0hKyPsYtgMKWiaO8p6X2I7JoYZzJ8WaS/8dAmYC2PgV7ua0Rzo9gKW+MWwwXksbunLeEsr2xBc8Vj7VeOeCcLU/qCBq0BYcZD3Ox1V995lPdrEzPA5F5UO3S5NvI3SSN2X8gfjKdTUeZdkLPnq8/q+KvPuleDPMrb3hgySH8oPzVAHCDHpwl2icVWf+aiMfim5Lnpj6QYJSnpopza0d7wCutGfD8iXqGYdYxovTIbCP45jlzAF2TYaWYzfpk0TufZTGkAeySYfjaKeDYbjFXxACPDyX2k/3jOaVPxp9nR614JXnWXpBWg8Z2S5A1mJSgG7wZYXA6EOYQ2E7LxHGiRWyvMLT+LpF8UvjwVH8rnqvp/a/XTMgUCNDCdwj66Zqxbr8Kip/Hw+5JZaR5QFUwBBvBHByAJ/jaHWPVnOm4+6D4iXbrpP/S7v2EZrqLWd4AK6c9ffWQHumR75OEPZjI8AADto2yR/5aWDrI4+/YGkqks5RLKjpcK6mqhUib63HmEixIb07WDP44+qoESDZatHN/FCqgwSC73gcod/JU46a5HmQ3Qvl72CzakqpQZIqUh+kceS3fVcfMYm2Hgx1htGzDEBnxsMsyx71DXMI63tL+MDg/OCidXKD30+bQm9YULOq2Kh+lcbc8EpmL/Z6DDF9HW3EpZjuJvo8nbc+rIEG25QCop15WwhR8z4Y3LbSFHEaoGOni1xuMzUk1UiOh/oROixbxGFOX/pxhXPLK6uc5pPasU5B3G5c20QPp4Q68fvWwE8v4P2jSkknAXfcY2b7BrA69OvWzrLFVsTpUplVrQL/tNIVxAUhr0EUvV0EzWNeQXARBvtTedxXKTRpT2t/GdglPNOAvj6a3GCAbccT1y4u3YhHCjekPxFuRIaNqdpewYWvzfthrDIhKiZnAFwDtZRIqpCV1hKGSJN/c0fnELzWPFP0GWlEp3q+KfwREEajl2ssZBViy9GQ1gciNrZlMsR41btqrdTXaHGjfgGht2ADUgYVuqXYaaQC2JVwKV7DwLiJsUqarquG6yqXLypdu1JXSmPSic/fvhTWM5BgM+kWHUFote7PgeK7A9e/BnmWW6Bho7gtz0ni41JzuHwwQRs32stz90Us0FmXvq595Y2G5Yqn/3sfVG0qnjpaH+XgPlNJpW4uGCiHlzx0TXbpush9WbisQlSW4BANgQe5+dXE5VmCOUwFzsoyKX4HeCfjUszd8e9IhMk5CtjPvGt93jfKgrGjSHCo1VkgAYL3xOFSLx8pczO4Nx/znEo9uNuCVYkFbW8gtN5cWAUYdcq1VajSfImxfdE1X7SRldaK50QvCkW1GG2LR5LC/S09oh+eoGS0u9U9R5gzuJeDRO+PWWuy5az4mlrhmey6drMcuYR2K5LEp7QvYK4np8U36UauB81bP59cm5sje1TRSxbEzWEEpX2rTWNp6QAfbNt5AwW1MwKEvmephgEFKvBU7MO30IANpX3aUS3HCgGplNUaZA8ASXJSBxwTs+dxzEffWx2dQF3XRkVFWDK0hE6ajJXP1nFGD1eO4kewf1WASRIJO3Usc8AlAM7N/TMOf6qRF6Ho6JGpXj8ykAYJm9M/Pkkw4X9Pp4QBRyeuaNq0+eZ7gUcJ8GDQ/ldLNR4ORgI47JldKgCNl2daFLrG2QOnzgj+aDIdSOHWw1+kVN9i23Xry4zG1ELeuRUF7Z57cIl/AA2ymLFkCUI5TNPrUEn2TdFgpvRTwdBB4Y3nDsWDCBSiPCcRTT1P/GJysn4b7vzsWzNHUJefBVeaH2UKCuLmuhm/zRf/Hnarm+2B7KF8EXuvkMXqk470rNs0GK+JGFzB0V3rKEOYZzq1koSHORGWY0pM8guF0yTfXTFffUYrY7gG1M/VwnxP+KyoprQzYq1+wWS6Q2uJiLaA9ZBivLgsCw2VdVC3cUntHhx/RgH2LuUTjYQrAG5/M46HnUmpV7P11u8CuJBOTBEmDFrTM6oQWMTW7P/3GNv0NVxvEIzkWXpE/VrbVjQGxcw3pNNvccLHYtlSizFXhfaie2NfIbmro0CgdMFkw59ESZipLGM7kBzgoZklN7XUy02OeCDMYK6SXeoxUnuYu7f6V/qWR/oIe8UNyMoNX4CUnUDocuGIw3jWGcJyEzutQJd2GS0DNpNHxIJ67FbDmiLRsjvpUknCcFERxwCagye2M24tiLYTI+2OXY3tkALPYvB9WgqL/BRfb4Qn9HhIKE0MbeWe+DKTM4/fxbHDOS2obiCu8pHGsQPcwZtHd4Oge6x+TKRDH9pPU7UgOTy7FQxvjNNL/uOijRLpwsG0UUIe34k350VYlaJrdJ2ObD2IId+Oh9i3RcClCe0i3z4T7KJ1Opk0VIZrKQ0lIU9h4NP1Gw111QhhscjFFlAvGXlPh8qcJcLZHoB62uUX9SQRJ5rCqJd0F90JIPoQNt9m0yQCMWmRmshvZG5ZiSeiJLs3YzNQlqxiEeNSolJ9u/GzkR/hZOtFPprTqZLf6mqiJWfD2f1e9H8sKH3v98BrKKKNVq9nfJdmgwKFzphtEJhC3IKi3VJx8597ryvL88D8AqS4AFCqo3UR7ArttiFBXcB5boJgAbqAFftMwAMQgukL3EzyLiUivML1F9NYXeKfpSivnzTG/jahz31CmT0zo7rof/AFspnvNIaMNWfzb/HCobWZpooZMOAxmkei80PFGZXgyz4PgtnsjKFZSPY62+ke7TkEFhOBayS8cSsFim0NF0uP5iI2+TLaY+CSoArb05FD74AG/xwKYKq2w8cDI/wJYI2biF+gMuTeSRcwvto7RgiDJvVegh9fIsrxZ4DIL2tXKZbEgMJziJ6+lUPfXJtjio0weZply91gBZa0wfyqwfvDX/jxvNUL5apjdI/Dbmg4628ry06SUs41c+0ryoUOXWBxlfzTurOC8lySJ6Az7vmeCHuKo6o7bp88yrhPxhFfCoF6qb3vO/ZeU9rTKGHGkY9kdL1/J1xM4lOiI2XO3sAxJG9G5z0zGW7Yafm/x5NREG1XCfZfCetZLeqDx3Tx0OWxF9R6pkdfrcC+KrKCcvz2LY5esCRJuqDoN80LhqGPwcccSi5WbOmbvwQDVs3s1wSwxzndOT577qOs3O+JLW1viFP1hBe2OFAPiUSs8n0aIDAuyoOitwJsA5KIWAS2W3MBHZ/r+SWNDAruDf1oKKgOwTMdt2U9ZFGeHPI6Rs50IhXQqi/511725lD4JO0FVQjluj4+TXeG0poiCT9McGUQxl/o0LFjtupAPQx9VA+5L+NAHTxg+uIZHUYXnmuXAGSKPqLhJR14p7DWPKrQmhM4RgLZOaCYuRT+9+9rfVYUJ9wti/C+Yjd2JsqIdkM2Uv8cmx9o7vw1tZnbSA62b7DoIYh6hzWZKf3WPxA8fis9jVArYnFb7uChojI75ZOxnKGtw35OWmgcAQqiPIH+paCYfTk11OOmeb7Szk/OIH3WLPcMRGcWkzocy5vFNTLCXqMsqr8k23FFd4qmEhL3QWE+pBNqcZNsH898O1+sYzAL/sClp06zBLkGA4No6mUertU9F0FCQdjOVZyHGHvhoBTZArpQDnCv5NIHG/CcGrpWBEOrT6XbZJD34cH5k80A+sX8BDidGgXlYm1vj1YlufgKk+/PtTw26OktfZALHAUGESFc6XCAovUFbvRGxqsRAi19u7XXwKUwiaFud3mtgjv7yH4gIzLz+Au4q94SZ1BBjAgUyy0A+Z9m5hoAWm6dMnPQLK8AL2L83FP38HG+oN9hjlVfn9SoVWN5BZhmUqPQz+nLgmAPeqO1BnCvgqLAPEV2Rd5Cc7inEbd0iZMHCWbvafCc7FoQMAMaiTFa0EJXPUWc9fPm2MKiuBl6EbMhASr7DRe41o0h8At+oC4PyP/d+P+9PVeQ4TzCa9ZsNXGgxb/GJdmJ2rEY9DqB3EvRzX6/sOCMy8WbFIr3cFKKNPYe9/WAEnKSR1c0Q4BD50k/rwXlCBy+InUP9CL92qjGufECkrOLM5k7Cfmgi286hszE+zK5pJRIjazgqb9j/WOVVcZyKL1/KLbU9t+S4WNT99kgTUUT+6C8+g4j+ilHgAAA==" alt="Foto de Maicon Amaral"></div>
+    <p class="kicker"><b>●</b> disponível · estágio e júnior · remoto</p>
+    <h1>Maicon Amaral</h1>
+    <p class="role">Desenvolvedor Back-end Java</p>
+    <p class="pitch">Transformo regras de negócio em APIs claras, confiáveis e fáceis de manter, com Java, Spring Boot e PostgreSQL.</p>
+  </div>
+  <nav aria-label="Seções">
+    <ul id="nav">
+      <li><a href="#sobre" class="active"><i></i>Sobre</a></li>
+      <li><a href="#projetos"><i></i>Projetos</a></li>
+      <li><a href="#experiencia"><i></i>Experiência</a></li>
+      <li><a href="#testes"><i></i>Testes</a></li>
+      <li><a href="#stack"><i></i>Stack</a></li>
+      <li><a href="#contato"><i></i>Contato</a></li>
+    </ul>
+  </nav>
+  <div class="rail-foot">
+    <a class="btn primary" href="assets/curriculo-maicon-amaral-backend-java.pdf">Baixar currículo ↓</a>
+    <a class="tlink" href="https://github.com/maicon-castilhos">GitHub ↗</a>
+    <a class="tlink" href="https://www.linkedin.com/in/maicon-amaral-b9283722a/">LinkedIn ↗</a>
+  </div>
+</header>
 
 <main id="main">
-<div class="wrap pad">
 
-<section id="home" style="padding-top:0">
-<div class="hero">
-  <div style="min-width:0">
-    <div class="who">
-      <div class="avatar"><span aria-hidden="true">MA</span><img src="data:image/webp;base64,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" alt="Foto de Maicon Amaral" onerror="this.remove()"></div>
-      <div style="min-width:0">
-        <div class="kicker"><b>●</b> disponível · estágio e júnior · remoto</div>
-        <h1>Maicon Amaral</h1>
-        <div class="role">Desenvolvedor Back-end Java</div>
-      </div>
-    </div>
-    <p class="intro">Graduando em Ciência da Computação, desenvolvo APIs REST com Java, Spring Boot e PostgreSQL, cuidando de modelagem de dados, autenticação, regras de negócio, validações e testes de integração. Contribuo com o projeto open source Calendar e desenvolvo o Acompanha Aí.</p>
-    <p class="intro">Antes do código, liderei operações e equipes. Dessa fase trago atenção às regras de negócio, comunicação clara e foco em resultado. Fora do código, sou beatmaker.</p>
-    <div class="btns">
-      <a class="btn primary" href="#projetos">Ver projetos</a>
-      <a class="btn" href="#contato">Contato</a>
-      <a class="btn" href="assets/curriculo-maicon-amaral-backend-java.pdf">Baixar currículo ↓</a>
-    </div>
-    <div class="stats">
-      <div><strong>280</strong><span>testes passando no PR integrado do Calendar</span></div>
-      <div><strong>2</strong><span>PRs em open source, 1 integrado</span></div>
-      <div><strong>4</strong><span>APIs back-end no GitHub</span></div>
-    </div>
+<section id="sobre">
+  <h2 class="sh">Sobre</h2>
+  <div class="prose">
+    <p>Sou graduando em Ciência da Computação e desenvolvo APIs REST com <strong>Java, Spring Boot e PostgreSQL</strong>, cuidando de modelagem de dados, autenticação, regras de negócio, validações e testes de integração.</p>
+    <p>Hoje contribuo com o projeto open source <strong>Calendar</strong>, onde tenho um PR integrado, e desenvolvo o <strong>Acompanha Aí</strong>, uma plataforma para acompanhar candidaturas a vagas.</p>
+    <p>Antes do código, liderei operações e equipes. Dessa fase trago atenção às regras de negócio, comunicação clara e foco em resultado. Fora do código, sou beatmaker.</p>
   </div>
   <div class="term" aria-label="Perfil em formato de resposta de API">
     <div class="term-top"><i></i><i></i><i></i><span>GET /api/devs/maicon-amaral</span></div>
 <pre><span class="c">HTTP/1.1</span> <span class="s">200 OK</span>
-<span class="c">Content-Type: application/json</span>
 
 {
-  <span class="k">"nome"</span>: <span class="s">"Maicon Amaral"</span>,
   <span class="k">"foco"</span>: <span class="s">"Back-end Java"</span>,
-  <span class="k">"stack"</span>: [<span class="s">"Java 25"</span>, <span class="s">"Spring Boot 4"</span>,
-            <span class="s">"PostgreSQL"</span>, <span class="s">"Flyway"</span>],
+  <span class="k">"stack"</span>: [<span class="s">"Java 25"</span>, <span class="s">"Spring Boot 4"</span>, <span class="s">"PostgreSQL"</span>],
   <span class="k">"openSource"</span>: <span class="s">"Calendar · PR #227 merged"</span>,
   <span class="k">"formacao"</span>: <span class="s">"Ciência da Computação · 2º sem."</span>,
-  <span class="k">"hobby"</span>: <span class="s">"beatmaker"</span>,
   <span class="k">"local"</span>: <span class="s">"Passo Fundo, RS"</span>,
   <span class="k">"disponivel"</span>: <span class="n">true</span>
-}<span class="caret"></span></pre>
-  </div>
-</div>
-<div class="values-row">
-  <div class="card val"><div class="gl">{ }</div><h3>Clareza</h3><p>API com contrato previsível e responsabilidades separadas em camadas.</p></div>
-  <div class="card val"><div class="gl">≡</div><h3>Consistência</h3><p>Banco versionado com Flyway e dados validados na entrada.</p></div>
-  <div class="card val"><div class="gl">✓</div><h3>Confiança</h3><p>Testes cobrindo o caminho feliz e os cenários de falha.</p></div>
-  <div class="card val"><div class="gl">↻</div><h3>Evolução</h3><p>Documentação, investigação de problemas e entender o porquê do código.</p></div>
-</div>
-</section>
-</div>
-
-<div class="band" aria-label="Hard skills">
-  <div class="track" id="t1"></div>
-  <div class="track rev" id="t2"></div>
-</div>
-
-<div class="wrap pad">
-
-<section id="projetos" class="rv">
-  <div class="eyebrow">&lt;/&gt; projetos</div>
-  <h2>Código em <em>produção</em> e em evolução</h2>
-  <p class="lead">Contexto, decisões técnicas e código. Comece pelos dois destaques; os demais mostram a base que levou até eles.</p>
-  <div class="subhead">// destaques</div>
-  <div class="projects" id="projList"></div>
-  <div class="subhead">// também construí</div>
-  <div class="mid" id="midList"></div>
-  <div class="subhead">// estudos e front-end</div>
-  <div class="mini" id="miniList"></div>
-</section>
-
-<section id="qualidade" class="rv">
-  <div class="eyebrow">✓ qualidade de software</div>
-  <h2>Testes como parte da <em>entrega</em></h2>
-  <p class="lead">Como valido o que construo, do caminho feliz aos cenários de falha. O resultado de cada projeto está em Projetos.</p>
-  <div class="qa">
-    <div class="card"><div class="code">401·403</div><h3>Segurança</h3><p>Spring Security Test para cobrir acesso sem login, permissões e tentativas de ler dados de outro usuário.</p></div>
-    <div class="card"><div class="code">400·404</div><h3>Validação</h3><p>MockMvc e cenários no Postman para entradas inválidas e recursos inexistentes, conferindo status e mensagem de erro.</p></div>
-    <div class="card"><div class="code">409</div><h3>Concorrência</h3><p>Testes de edição simultânea para garantir que uma atualização desatualizada seja rejeitada em vez de sobrescrever dados.</p></div>
-    <div class="card"><div class="code">CI ✓</div><h3>Regressão</h3><p>A suíte completa roda a cada mudança, com JUnit e Mockito no pipeline de CI/CD, antes de abrir um PR.</p></div>
+}</pre>
   </div>
 </section>
 
-<section id="jornada" class="rv">
-  <div class="eyebrow">→ jornada</div>
-  <h2>Da operação ao <em>código</em></h2>
-  <p class="lead">Meu foco é conectar regras de negócio, dados e código para transformar requisitos em APIs claras, confiáveis e fáceis de manter.</p>
-  <ol class="tline">
-    <li><span class="when">nov/2026 — atual</span><div><h3>Desenvolvedor Back-end Java</h3><span class="where">Calendar · open source</span><p>Contribuição voluntária a um projeto mantido por outras pessoas, com revisão de código até o merge.</p></div></li>
-    <li><span class="when">ago/2026 — atual</span><div><h3>Estágio em Data Quality</h3><span class="where">Stringhini</span><p>Auditoria e correção de dados com Eyes 3.0.</p></div></li>
-    <li><span class="when">jun/2026 — out/2026</span><div><h3>Full Stack Júnior</h3><span class="where">Lucas Silva e Associados</span><p>Site institucional em React e plataforma interna em Java, Spring Boot e PostgreSQL.</p></div></li>
-    <li><span class="when">jul/2025 — mar/2026</span><div><h3>Site Leader</h3><span class="where">Shopee</span><p>Gestão de equipe em inbound e outbound. A produtividade foi de 425 para 617 pacotes por pessoa.</p></div></li>
-  </ol>
-  <p class="edu-line"><b>Ciência da Computação</b> · Universidade Cruzeiro do Sul · 2º semestre, conclusão prevista em fev/2030</p>
+<section id="projetos">
+  <h2 class="sh">Projetos</h2>
+  <ul class="rows">
+    <li class="row">
+      <div class="meta">Open source</div>
+      <div>
+        <h3><a href="https://github.com/Tecnologia-da-Informacao-BR/Calendar">Calendar</a><span class="chip">PR #228 em andamento</span></h3>
+        <p>Contribuição voluntária no back-end de um projeto de código aberto em Java, Spring Boot e PostgreSQL.</p>
+        <ul class="pts">
+          <li>Preferências de notificação por usuário e antecedência opcional de lembretes por tarefa (PR #227, integrado).</li>
+          <li>Validação na API, migrações com Flyway e testes de integração com PostgreSQL, com a suíte de 280 testes passando.</li>
+          <li>Agendamento persistente de lembretes, atualizando os horários quando a tarefa é editada (PR #228).</li>
+        </ul>
+        <ul class="tags"><li>Java</li><li>Spring Boot</li><li>PostgreSQL</li><li>Flyway</li><li>Testes de integração</li></ul>
+        <div class="rlinks"><a href="https://github.com/Tecnologia-da-Informacao-BR/Calendar/pull/227">PR #227</a><a href="https://github.com/Tecnologia-da-Informacao-BR/Calendar/pull/228">PR #228</a></div>
+      </div>
+    </li>
+    <li class="row">
+      <div class="meta">Projeto principal</div>
+      <div>
+        <h3><a href="https://github.com/acompanhaai-project/acompanhaai-v1">Acompanha Aí</a><span class="chip">Em desenvolvimento</span></h3>
+        <p>Plataforma web para acompanhar candidaturas e processos seletivos, com contas de usuários, filtros, paginação e histórico de etapas.</p>
+        <ul class="pts">
+          <li>API em camadas: controllers, services, repositories, DTOs e entidades.</li>
+          <li>Autenticação por sessão com Spring Security, proteção CSRF e isolamento de dados por usuário.</li>
+          <li>Transações, deduplicação de vagas e controle de versão contra sobrescrita de alterações.</li>
+          <li>Testes com JUnit, Mockito e MockMvc, documentação OpenAPI, Docker e CI/CD.</li>
+        </ul>
+        <ul class="tags"><li>Java 25</li><li>Spring Boot 4</li><li>Spring Security</li><li>PostgreSQL</li><li>Flyway</li><li>Angular</li><li>Docker</li></ul>
+      </div>
+    </li>
+    <li class="row">
+      <div class="meta">Back-end</div>
+      <div>
+        <h3><a href="https://github.com/maicon-castilhos/automechanic-api">Automechanic API</a></h3>
+        <p>API REST para clientes, veículos, peças, serviços e ordens de serviço de uma oficina, com cálculo de valores, validações de negócio e 18 testes de regressão.</p>
+        <ul class="tags"><li>Java 25</li><li>Spring Boot 4</li><li>JPA/Hibernate</li><li>PostgreSQL</li><li>H2</li></ul>
+      </div>
+    </li>
+    <li class="row">
+      <div class="meta">Profissional</div>
+      <div>
+        <h3>Plataforma interna do escritório <small>código não público</small></h3>
+        <p>Plataforma da Lucas Silva e Associados com distribuição de tarefas por pontuação, regras de promoção, acesso de clientes a documentos e perfis de acesso.</p>
+        <ul class="tags"><li>Java</li><li>Spring Boot</li><li>PostgreSQL</li></ul>
+      </div>
+    </li>
+  </ul>
+  <p class="sub">Estudos e front-end</p>
+  <ul class="rows">
+    <li class="row">
+      <div class="meta">Estudo</div>
+      <div>
+        <h3><a href="https://github.com/maicon-castilhos/springboot4-jpa">Sistema de Pedidos</a></h3>
+        <p>APIs REST para usuários, produtos, categorias, pedidos e pagamentos, com modelagem de relacionamentos em JPA.</p>
+      </div>
+    </li>
+    <li class="row">
+      <div class="meta">Estudo</div>
+      <div>
+        <h3><a href="https://github.com/maicon-castilhos/blog-api-springboot-mongodb">API Blog</a></h3>
+        <p>API de posts, comentários e buscas com Spring Boot e MongoDB, validada pelo Postman.</p>
+      </div>
+    </li>
+    <li class="row">
+      <div class="meta">Front-end</div>
+      <div>
+        <h3><a href="https://github.com/maicon-castilhos/lucas-associado">Lucas Silva e Advogados Associados</a></h3>
+        <p>Site institucional responsivo em React e Vite, com quatro idiomas.</p>
+        <div class="rlinks"><a href="https://maicon-castilhos.github.io/lucas-associado/">Ver site</a></div>
+      </div>
+    </li>
+    <li class="row">
+      <div class="meta">Front-end</div>
+      <div>
+        <h3><a href="https://github.com/maicon-castilhos/pratica-frontend-1-CC">Sementes do Amanhã</a></h3>
+        <p>Prática de front-end para uma ONG fictícia, em HTML, CSS e JavaScript.</p>
+        <div class="rlinks"><a href="https://maicon-castilhos.github.io/pratica-frontend-1-CC/">Ver site</a></div>
+      </div>
+    </li>
+  </ul>
 </section>
 
-<section id="arsenal" class="rv">
-  <div class="eyebrow">{ } habilidades</div>
-  <h2>Meu <em>arsenal</em></h2>
-  <p class="lead">Um resumo do que uso. O contexto de cada tecnologia está nos projetos.</p>
-  <dl class="card stackc">
-    <div><dt>// back-end</dt><dd>Java 17, 21 e 25 · Spring Boot 4 · Spring Security · APIs REST · Maven</dd></div>
-    <div><dt>// dados</dt><dd>PostgreSQL · SQL · Spring Data JPA · Hibernate · Flyway · MongoDB</dd></div>
-    <div><dt>// testes e docs</dt><dd>JUnit · Mockito · MockMvc · Spring Security Test · OpenAPI · Postman</dd></div>
-    <div><dt>// entrega e front</dt><dd>Docker · CI/CD · Git e GitHub · Angular · React</dd></div>
+<section id="experiencia">
+  <h2 class="sh">Experiência</h2>
+  <ul class="rows">
+    <li class="row">
+      <div class="meta">nov/2026 — atual</div>
+      <div><h3>Desenvolvedor Back-end Java <small>Calendar · open source</small></h3>
+      <p>Contribuição voluntária a um projeto mantido por outras pessoas, com revisão de código até o merge.</p></div>
+    </li>
+    <li class="row">
+      <div class="meta">ago/2026 — atual</div>
+      <div><h3>Estágio em Data Quality <small>Stringhini</small></h3>
+      <p>Auditoria e correção de dados com Eyes 3.0.</p></div>
+    </li>
+    <li class="row">
+      <div class="meta">jun/2026 — out/2026</div>
+      <div><h3>Full Stack Júnior <small>Lucas Silva e Associados</small></h3>
+      <p>Site institucional em React e plataforma interna em Java, Spring Boot e PostgreSQL.</p></div>
+    </li>
+    <li class="row">
+      <div class="meta">jul/2025 — mar/2026</div>
+      <div><h3>Site Leader <small>Shopee</small></h3>
+      <p>Gestão de equipe em inbound e outbound. A produtividade foi de 425 para 617 pacotes por pessoa.</p></div>
+    </li>
+  </ul>
+  <p class="after"><b>Ciência da Computação</b> · Universidade Cruzeiro do Sul · 2º semestre, conclusão prevista em fev/2030</p>
+</section>
+
+<section id="testes">
+  <h2 class="sh">Como eu testo</h2>
+  <ul class="rows">
+    <li class="row"><div class="meta code">401 · 403</div><div><h3>Segurança</h3><p>Spring Security Test para cobrir acesso sem login, permissões e tentativas de ler dados de outro usuário.</p></div></li>
+    <li class="row"><div class="meta code">400 · 404</div><div><h3>Validação</h3><p>MockMvc e cenários no Postman para entradas inválidas e recursos inexistentes, conferindo status e mensagem de erro.</p></div></li>
+    <li class="row"><div class="meta code">409</div><div><h3>Concorrência</h3><p>Testes de edição simultânea para garantir que uma atualização desatualizada seja rejeitada em vez de sobrescrever dados.</p></div></li>
+    <li class="row"><div class="meta code">CI ✓</div><div><h3>Regressão</h3><p>A suíte completa roda a cada mudança, com JUnit e Mockito no pipeline de CI/CD, antes de abrir um PR.</p></div></li>
+  </ul>
+</section>
+
+<section id="stack">
+  <h2 class="sh">Stack</h2>
+  <dl class="stack">
+    <div><dt>Back-end</dt><dd>Java 17, 21 e 25 · Spring Boot 4 · Spring Security · APIs REST · Maven</dd></div>
+    <div><dt>Dados</dt><dd>PostgreSQL · SQL · Spring Data JPA · Hibernate · Flyway · MongoDB</dd></div>
+    <div><dt>Testes e docs</dt><dd>JUnit · Mockito · MockMvc · Spring Security Test · OpenAPI · Postman</dd></div>
+    <div><dt>Entrega e front</dt><dd>Docker · CI/CD · Git e GitHub · Angular · React</dd></div>
   </dl>
 </section>
 
-<section id="contato" class="rv">
-  <div class="contact">
-    <div class="eyebrow" style="justify-content:center"># contato</div>
-    <h2>Vamos construir algo <em>confiável</em></h2>
-    <p>Busco estágio ou vaga júnior em back-end Java, com preferência por trabalho remoto. Se você procura alguém com projetos que envolvem APIs, segurança, persistência e testes, vamos conversar.</p>
-    <div class="mail"><span id="email">maikamaral123@gmail.com</span><button type="button" id="copy">Copiar e-mail</button></div>
-    <div class="btns">
-      <a class="btn primary" href="https://www.linkedin.com/in/maicon-amaral-b9283722a/">LinkedIn ↗</a>
-      <a class="btn" href="https://github.com/maicon-castilhos">GitHub ↗</a>
-      <a class="btn" href="assets/curriculo-maicon-amaral-backend-java.pdf">Currículo ↓</a>
-    </div>
+<section id="contato" class="cta">
+  <h2 class="sh">Contato</h2>
+  <h3>Vamos construir algo <em>confiável</em></h3>
+  <p>Busco estágio ou vaga júnior em back-end Java, com preferência por trabalho remoto. Se você procura alguém com projetos que envolvem APIs, segurança, persistência e testes, vamos conversar.</p>
+  <div class="mail"><span id="email">maikamaral123@gmail.com</span><button type="button" id="copy">Copiar e-mail</button></div>
+  <div class="rail-foot">
+    <a class="btn" href="https://www.linkedin.com/in/maicon-amaral-b9283722a/">LinkedIn ↗</a>
+    <a class="btn" href="https://github.com/maicon-castilhos">GitHub ↗</a>
   </div>
 </section>
 
-<footer>
-  <span>© 2026 Maicon Amaral · Back-end Java · Spring Boot · APIs REST</span>
-  <span><button type="button" class="mtoggle" data-on="Pausar animações" data-off="Ativar animações" aria-pressed="false">Pausar animações</button><a href="https://github.com/maicon-castilhos">GitHub</a><a href="https://www.linkedin.com/in/maicon-amaral-b9283722a/">LinkedIn</a></span>
-</footer>
-</div>
+<footer>© 2026 Maicon Amaral · Passo Fundo, RS</footer>
 </main>
+</div>
 
 <script>
 (function(){
-let reduce=false;try{reduce=localStorage.getItem('calm')==='1'}catch(e){}
-document.documentElement.classList.toggle('calm',reduce);
-const fine=matchMedia('(hover: hover) and (pointer: fine)').matches;
 document.documentElement.lang='pt-BR';
-document.documentElement.classList.add('js');
+const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- Dados ---------- */
-const G='https://github.com/maicon-castilhos/';
-const CAL='https://github.com/Tecnologia-da-Informacao-BR/Calendar';
-const P=[
- {t:'Calendar',meta:'Open source · Back-end',st:'PR #228 em andamento',gl:'@',
-  d:'Contribuição voluntária no back-end do Calendar, projeto de código aberto em Java, Spring Boot e PostgreSQL.',
-  pts:['Preferências de notificação por usuário e antecedência opcional de lembretes por tarefa.','Validação na API, migrações com Flyway e testes de integração com PostgreSQL.','Agendamento persistente de lembretes, atualizando horários quando a tarefa é editada (PR #228).'],
-  s:['Java','Spring Boot','PostgreSQL','Flyway','Testes de integração'],
-  l:[['Repositório',CAL],['PR #227',CAL+'/pull/227'],['PR #228',CAL+'/pull/228']]},
- {t:'Acompanha Aí',meta:'Projeto principal · Full stack',st:'Em desenvolvimento',gl:'{ }',
-  d:'Plataforma web para acompanhar candidaturas e processos seletivos, com contas de usuários, filtros, paginação e histórico de etapas.',
-  pts:['API em camadas: controllers, services, repositories, DTOs e entidades.','Autenticação por sessão com Spring Security, proteção CSRF e isolamento de dados por usuário.','Transações, deduplicação de vagas e controle de versão contra sobrescrita de alterações.','Testes com JUnit, Mockito e MockMvc, OpenAPI, Docker e CI/CD.'],
-  s:['Java 25','Spring Boot 4','Spring Security','PostgreSQL','Flyway','Angular','Docker'],
-  l:[['Ver código','https://github.com/acompanhaai-project/acompanhaai-v1']]},
- {t:'Automechanic API',meta:'Back-end · Oficina',st:'Em evolução',gl:'⚙',
-  d:'API REST para clientes, veículos, peças, serviços e ordens de serviço de uma oficina, com cálculo de valores e validações de negócio.',
-  pts:['Arquitetura em camadas, JPA e perfis de ambiente.','18 testes de regressão para descontos, vínculos entre registros e respostas HTTP.'],
-  s:['Java 25','Spring Boot 4','JPA/Hibernate','PostgreSQL','H2'],l:[['Ver código',G+'automechanic-api']]},
- {t:'Plataforma interna do escritório',meta:'Experiência profissional',st:'Uso interno',gl:'⚖',
-  d:'Como Full Stack Júnior na Lucas Silva e Associados, desenvolvi uma plataforma interna em Java, Spring Boot e PostgreSQL.',
-  pts:['Distribuição de tarefas com pontuação e regras de promoção.','Acesso de clientes a documentos e acompanhamento de etapas.','Perfis de acesso para preservar segurança e integridade dos dados.','Dashboards de indicadores conforme o perfil de acesso.'],
-  s:['Java','Spring Boot','PostgreSQL','Regras de negócio'],l:[],note:'Código e dados do escritório não são públicos.'},
- {t:'Sistema de Pedidos',meta:'Back-end · Estudo',st:'Concluído',gl:'⇄',
-  d:'APIs REST para usuários, produtos, categorias, pedidos e pagamentos, com modelagem de relacionamentos.',
-  pts:['Relacionamentos um-para-muitos e muitos-para-muitos com Spring Data JPA e Hibernate.'],
-  s:['Java','Spring Boot','JPA/Hibernate','PostgreSQL'],l:[['Ver código',G+'springboot4-jpa']]},
- {t:'API Blog',meta:'Back-end · Estudo',st:'Concluído',gl:'¶',
-  d:'API de posts, comentários e buscas integrando Spring Boot a um banco orientado a documentos.',
-  pts:['Consultas por título e período no MongoDB, validadas pelo Postman.'],
-  s:['Java','Spring Boot','MongoDB','Postman'],l:[['Ver código',G+'blog-api-springboot-mongodb']]}
-];
-const F=[
- {t:'Lucas Silva e Advogados Associados',d:'Site institucional responsivo em React e Vite, com quatro idiomas e efeitos WebGL com alternativa estática.',s:['React','Vite','WebGL'],l:[['Código',G+'lucas-associado'],['Site','https://maicon-castilhos.github.io/lucas-associado/']]},
- {t:'Sementes do Amanhã',d:'Prática de front-end para uma ONG fictícia, com interface dedicada à apresentação da iniciativa.',s:['HTML','CSS','JavaScript'],l:[['Código',G+'pratica-frontend-1-CC'],['Site','https://maicon-castilhos.github.io/pratica-frontend-1-CC/']]}
-];
-const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-const tags=a=>'<ul class="tags">'+a.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
-const links=a=>a.length?'<div class="plinks">'+a.map(x=>'<a href="'+x[1]+'">'+x[0]+' ↗</a>').join('')+'</div>':'';
-const BIG=P.slice(0,2),MID=P.slice(2,4),SMALL=P.slice(4);
-document.getElementById('projList').innerHTML=BIG.map((p,i)=>
- '<article class="card proj rv"><div class="cover"><canvas class="rain" aria-hidden="true"></canvas><span class="glyph">'+p.gl+'</span><span class="num">'+String(i+1).padStart(2,'0')+'</span></div>'+
- '<div class="pbody"><div class="pmeta"><span>'+p.meta+'</span><span class="status">'+p.st+'</span></div><h3>'+p.t+'</h3><p>'+p.d+'</p>'+
- '<ul class="pts">'+p.pts.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+tags(p.s)+(p.note?'<p style="font-size:13px">'+p.note+'</p>':'')+links(p.l)+'</div></article>').join('');
-document.getElementById('midList').innerHTML=MID.map((p,i)=>
- '<article class="card pmid"><div class="cover"><canvas class="rain" aria-hidden="true"></canvas><span class="num">'+String(i+3).padStart(2,'0')+'</span></div>'+
- '<div class="pmeta"><span>'+p.meta+'</span><span class="status">'+p.st+'</span></div><h3>'+p.t+'</h3><p>'+p.d+'</p>'+
- '<ul class="pts">'+p.pts.slice(0,2).map(x=>'<li>'+x+'</li>').join('')+'</ul>'+tags(p.s)+(p.note?'<p class="note">'+p.note+'</p>':'')+links(p.l)+'</article>').join('');
-const SM=SMALL.map(p=>({k:'Back-end · estudo',t:p.t,d:p.d,s:p.s,l:p.l})).concat(F.map(p=>({k:'Front-end',t:p.t,d:p.d,s:p.s,l:p.l})));
-document.getElementById('miniList').innerHTML=SM.map(p=>'<article class="card"><div class="mk">'+p.k+'</div><h3>'+p.t+'</h3><p>'+p.d+'</p>'+tags(p.s)+links(p.l)+'</article>').join('');
+/* Brilho suave que segue o mouse */
+const glow=document.getElementById('glow');let gq=0,gx=0,gy=0;
+addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;gx=e.clientX;gy=e.clientY;
+  if(!gq)gq=requestAnimationFrame(()=>{gq=0;glow.style.transform='translate('+gx+'px,'+gy+'px)';glow.classList.add('on')})},{passive:true});
+document.documentElement.addEventListener('mouseleave',()=>glow.classList.remove('on'));
 
-/* ---------- Carrossel ---------- */
-const sk1=[['Java','clareza'],['Spring Boot','estrutura'],['APIs REST','contratos'],['PostgreSQL','consistência'],['Spring Security','proteção'],['Flyway','versionamento'],['JUnit','confiança'],['Docker','reprodutível'],['Mockito','isolamento']];
-const sk2=[['Spring Data JPA','persistência'],['Hibernate','mapeamento'],['SQL','consultas'],['MockMvc','integração'],['OpenAPI','documentação'],['CI/CD','entrega'],['Postman','validação'],['Maven','build'],['MongoDB','documentos'],['Angular','interface']];
-const pills=(a,dup)=>a.map(x=>'<span class="pill'+(dup?' dup':'')+'"'+(dup?' aria-hidden="true"':'')+'>'+x[0]+' <small>'+x[1]+'</small></span>').join('');
-document.getElementById('t1').innerHTML=pills(sk1)+pills(sk1,1);
-document.getElementById('t2').innerHTML=pills(sk2)+pills(sk2,1);
-
-/* ---------- Fundo (matrix rain revelado pelo mouse) ---------- */
-const rev=document.getElementById('bgReveal');
-
-/* ---------- Cursor neon ---------- */
-const glow=document.getElementById('glow');
-let mx=innerWidth*.6,my=innerHeight*.35,gx=mx,gy=my,moved=false;
-let idle;
-addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||reduce)return;mx=e.clientX;my=e.clientY;wake();
-  if(!moved){gx=mx;gy=my;moved=true}
-  document.body.classList.add('mouse');clearTimeout(idle);idle=setTimeout(()=>document.body.classList.remove('mouse'),1400)},{passive:true});
-document.documentElement.addEventListener('mouseleave',()=>{clearTimeout(idle);document.body.classList.remove('mouse')});
-function setReveal(x,y){rev.style.setProperty('--mx',x+'px');rev.style.setProperty('--my',y+'px')}
-let raf=0;
-function loop(){
-  gx+=(mx-gx)*.08;gy+=(my-gy)*.08;
-  glow.style.transform='translate('+gx+'px,'+gy+'px)';setReveal(gx,gy);
-  const settled=Math.abs(mx-gx)<.5&&Math.abs(my-gy)<.5;
-  raf=(reduce||settled)?0:requestAnimationFrame(loop);
-}
-function wake(){if(!raf&&!reduce)raf=requestAnimationFrame(loop)}
-
-/* ---------- Holofote nos cartões ---------- */
-document.addEventListener('pointermove',e=>{const c=e.target.closest&&e.target.closest('.card');if(!c)return;const b=c.getBoundingClientRect();c.style.setProperty('--cx',(e.clientX-b.left)+'px');c.style.setProperty('--cy',(e.clientY-b.top)+'px')},{passive:true});
-
-/* ---------- Barra lateral: seção ativa ---------- */
-const side=document.getElementById('side'),ind=document.getElementById('ind'),out=document.getElementById('readout');
-const links_=[...document.querySelectorAll('#nav a')];
-const secs=links_.map(a=>document.querySelector(a.getAttribute('href')));
-const route={home:'/inicio',sobre:'/sobre',arsenal:'/arsenal',projetos:'/projetos',qualidade:'/testes',jornada:'/jornada',contato:'/contato'};
-let cur=null;
-function place(a){
-  const mobile=innerWidth<=860;
-  if(mobile){ind.style.width=a.offsetWidth+'px';ind.style.height='';ind.style.transform='translateX('+a.parentElement.offsetLeft+'px)'}
-  else{ind.style.width='';ind.style.height=a.offsetHeight+'px';ind.style.transform='translateY('+a.parentElement.offsetTop+'px)'}
-}
-function scramble(txt){
-  if(reduce){out.innerHTML='<span>GET</span>'+txt;return}
-  const ch='/<>{}#@01xa';let n=0;
-  const iv=setInterval(()=>{n++;out.innerHTML='<span>GET</span>'+txt.split('').map((c,i)=>i<n*1.6?c:ch[Math.floor(Math.random()*ch.length)]).join('');if(n*1.6>=txt.length)clearInterval(iv)},28);
-}
-function setActive(id,fx){
-  if(id===cur)return;cur=id;
-  links_.forEach(a=>{a.classList.remove('active');a.removeAttribute('aria-current')});
-  let i=Math.max(0,links_.findIndex(a=>a.getAttribute('href')==='#'+id));
-  while(i>0&&links_[i].offsetParent===null)i--;
-  links_[i].classList.add('active');links_[i].setAttribute('aria-current','true');place(links_[i]);
-  secs.forEach(s=>s.classList.toggle('on',s.id===id));
-  scramble(route[id]+' 200');
-  if(fx&&!reduce){side.classList.remove('zap');void side.offsetWidth;side.classList.add('zap')}
-}
-let first=true;
+/* Seção ativa no painel */
+const links=[...document.querySelectorAll('#nav a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+let cur='sobre',first=true;
 function spy(){
-  let id='home';const line=innerHeight*.38;
+  let id=secs[0].id;const line=innerHeight*.35;
   secs.forEach(s=>{if(s.getBoundingClientRect().top<=line)id=s.id});
-  if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)id='contato';
-  setActive(id,!first);first=false;
+  if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)id=secs[secs.length-1].id;
+  if(id===cur&&!first)return;
+  links.forEach(a=>{const on=a.getAttribute('href')==='#'+id;a.classList.toggle('active',on);
+    if(on){a.setAttribute('aria-current','true');if(!first&&!calm){a.classList.remove('lit');void a.offsetWidth;a.classList.add('lit')}}
+    else{a.removeAttribute('aria-current');a.classList.remove('lit')}});
+  cur=id;first=false;
 }
-addEventListener('scroll',spy,{passive:true});
-addEventListener('resize',()=>{const id=cur;cur=null;setActive(id,false)});
-spy();place(links_[0]);setTimeout(()=>{const a=links_.find(x=>x.classList.contains('active'));if(a)place(a)},400);
+addEventListener('scroll',spy,{passive:true});spy();
 
-/* ---------- Entrada suave ---------- */
-if('IntersectionObserver' in window&&!reduce){
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
-  document.querySelectorAll('.rv').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('in');else io.observe(el)});
-}else document.querySelectorAll('.rv').forEach(el=>el.classList.add('in'));
-
-/* ---------- Matrix rain nas capas ---------- */
-const GL='01{}[]()<>/;=+*&|!#@$%JAVAｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ';
-const rains=[...document.querySelectorAll('canvas.rain')].map(c=>({c,x:c.getContext('2d'),on:true}));
-function sizeRain(r){const b=r.c.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);r.w=b.width;r.h=b.height;
-  r.c.width=Math.max(1,b.width*d);r.c.height=Math.max(1,b.height*d);r.x.setTransform(d,0,0,d,0,0);
-  r.n=Math.ceil(b.width/14);r.cols=Array.from({length:r.n},()=>Math.floor(Math.random()*(b.height/16+14))-14);
-  for(let k=0;k<26;k++)stepRain(r)}
-function stepRain(r){const x=r.x;
-  x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,'+(r.fade||.14)+')';x.fillRect(0,0,r.w,r.h);
-  x.globalCompositeOperation='source-over';x.font='14px "JetBrains Mono",monospace';
-  for(let i=0;i<r.n;i++){const y=r.cols[i]*16;
-    x.fillStyle=Math.random()>.9?'#eaffff':(i%4?'#3fd0ff':'#7fd14b');
-    x.fillText(GL[Math.floor(Math.random()*GL.length)],i*14+2,y);
-    if(y>r.h&&Math.random()>.9)r.cols[i]=0;else r.cols[i]++}}
-rains.forEach(sizeRain);
-const bg={c:rev,x:rev.getContext('2d'),fade:.055};sizeRain(bg);
-if('IntersectionObserver' in window){const ro=new IntersectionObserver(es=>es.forEach(e=>{const r=rains.find(q=>q.c===e.target);if(r)r.on=e.isIntersecting}));rains.forEach(r=>ro.observe(r.c))}
-setInterval(()=>{if(reduce||document.hidden)return;rains.forEach(r=>{if(r.on)stepRain(r)});if(document.body.classList.contains('mouse'))stepRain(bg)},60);
-let rrt;addEventListener('resize',()=>{clearTimeout(rrt);rrt=setTimeout(()=>{rains.forEach(sizeRain);sizeRain(bg)},200)});
-
-/* ---------- Pausar animações ---------- */
-const mts=[...document.querySelectorAll('.mtoggle')];
-function syncMotion(){mts.forEach(b=>{b.textContent=reduce?b.dataset.off:b.dataset.on;b.setAttribute('aria-pressed',reduce?'true':'false')})}
-mts.forEach(b=>b.addEventListener('click',()=>{reduce=!reduce;document.documentElement.classList.toggle('calm',reduce);
-  if(reduce)document.body.classList.remove('mouse');
-  try{localStorage.setItem('calm',reduce?'1':'0')}catch(e){}
-  syncMotion()}));
-syncMotion();
-
-/* ---------- Copiar e-mail ---------- */
+/* Copiar e-mail */
 const btn=document.getElementById('copy'),em=document.getElementById('email');
 btn.addEventListener('click',()=>{
   const done=()=>{btn.textContent='Copiado';setTimeout(()=>btn.textContent='Copiar e-mail',1800)};
