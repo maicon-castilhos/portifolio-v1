@@ -212,13 +212,28 @@
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="section-heading">
       <h2 id="projects-title">Projetos em destaque</h2>
-      <p class="project-description">Projetos pessoais e experiências profissionais, com contexto, decisões técnicas e código.</p>
+      <p class="project-description">Projetos pessoais, contribuições de código aberto e experiências profissionais, com contexto, decisões técnicas e código.</p>
     </div>
     <div class="project-areas">
 <details class="project-area" id="projects-backend" open>
   <summary class="project-area-toggle">
-    <h3 class="project-area-title">Back end</h3><span class="project-area-count">3 projetos</span><svg class="project-area-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    <h3 class="project-area-title">Back end</h3><span class="project-area-count">4 projetos</span><svg class="project-area-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" /></svg>
   </summary>
+  <div class="project-area-content">
+    <article class="project-case" id="project-acompanha-ai">
+      <h4 class="project-title">Acompanha Aí</h4>
+      <p class="project-description">API para acompanhar candidaturas a vagas de emprego, com filtros por etapa, paginação e histórico de mudanças.</p>
+      <p class="project-proof">Implementei autenticação por sessão, isolamento de dados por usuário e controle de versão para rejeitar edições desatualizadas. Documentei a API com OpenAPI e escrevi testes de integração para esses cenários.</p>
+      <ul class="project-tags" aria-label="Tecnologias">
+        <li>Java 25</li>
+        <li>Spring Boot 4</li>
+        <li>Spring Security</li>
+        <li>PostgreSQL</li>
+        <li>Flyway</li>
+        <li>JUnit</li>
+      </ul>
+    </article>
+  </div>
   <div class="project-area-content project-area-grid"><article class="project-card project-card--featured" id="project-projeto4">
   <div class="project-media"><img src="assets/projeto4.webp" srcset="assets/projeto4-600.webp 600w, assets/projeto4.webp 1000w" sizes="(max-width: 639px) calc(100vw - 64px), (max-width: 1023px) calc(50vw - 64px), 500px" width="1000" height="563" alt="Capa do projeto Automechanic API" loading="lazy" decoding="async" /></div>
   <div class="project-body">
@@ -250,6 +265,36 @@
     <div class="project-links"><a href="https://github.com/maicon-castilhos/springboot4-jpa" target="_blank" rel="noopener noreferrer" class="project-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 8 4 12l4 4m8-8 4 4-4 4m-3-11-2 14" stroke-linecap="round" stroke-linejoin="round" /></svg><span>Ver código</span></a></div>
   </div>
 </article></div>
+</details>
+<details class="project-area" id="projects-open-source" open>
+  <summary class="project-area-toggle">
+    <h3 class="project-area-title">Código aberto</h3>
+    <span class="project-area-count">2 contribuições</span>
+    <svg class="project-area-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </summary>
+  <div class="project-area-content">
+    <article class="project-case" id="project-calendar">
+      <h4 class="project-title">Calendar</h4>
+      <p class="project-description">Contribuo com o backend do Calendar, projeto de código aberto mantido pela comunidade Tecnologia da Informação BR.</p>
+      <ul class="project-outcomes">
+        <li>Implementei preferências de notificação por usuário e antecedência configurável de lembretes por tarefa, com validações na API, migrações Flyway e testes de integração com PostgreSQL.</li>
+        <li>Trabalho no agendamento persistente de lembretes, com cálculo do horário em UTC e criação do lembrete junto com a tarefa.</li>
+      </ul>
+      <ul class="project-tags" aria-label="Tecnologias">
+        <li>Java</li>
+        <li>Spring Boot</li>
+        <li>PostgreSQL</li>
+        <li>Flyway</li>
+        <li>JUnit</li>
+      </ul>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/Tecnologia-da-Informacao-BR/Calendar/pull/227" target="_blank" rel="noopener noreferrer">PR #227 integrado</a>
+        <a class="project-link" href="https://github.com/Tecnologia-da-Informacao-BR/Calendar/pull/228" target="_blank" rel="noopener noreferrer">PR #228 em desenvolvimento</a>
+      </div>
+    </article>
+  </div>
 </details>
 <details class="project-area" id="projects-frontend">
   <summary class="project-area-toggle">
@@ -363,7 +408,7 @@
     </main>
     <footer class="site-footer"><div class="site-container footer-layout"><p>© <span id="year">2026</span> Maicon Amaral<br /><span>Backend Java · Spring Boot · APIs REST · SQL</span></p><nav aria-label="Links profissionais"><a href="https://github.com/maicon-castilhos" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.linkedin.com/in/maicon-amaral-b9283722a/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="assets/curriculo-maicon-amaral-backend-java.pdf" type="application/pdf" download>Currículo</a></nav></div></footer>
     <div id="preference-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
-    <script src="./js/i18n.js?v=backend-positioning-1" defer></script>
+    <script src="./js/i18n.js?v=projects-20261110" defer></script>
     <script src="./js/main.js?v=backend-positioning-1" defer></script>
   </body>
 </html>
